@@ -32,7 +32,8 @@ What this tool aims to achieve? To be a central place in your project that handl
 
 ## Inspiration
 
-- IdentityServer
+- IdentityServer (as for setup and config/ease of use)
+- Serilog (as for modularity, structure)
 
 ## Support
 
