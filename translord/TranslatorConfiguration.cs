@@ -10,6 +10,6 @@ public class TranslatorConfiguration(IList<Language> supportedLanguages, string 
 
     public ITranslator CreateTranslator()
     {
-        return new Translator();
+        return new Translator(this);
     }
 }
