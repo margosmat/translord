@@ -1,13 +1,12 @@
 ﻿using translord.Core;
+using translord.Enums;
 
 namespace translord;
 
-public class TranslatorConfiguration
+public class TranslatorConfiguration(IList<Language> supportedLanguages, string translationsPath)
 {
-    public TranslatorConfiguration()
-    {
-        
-    }
+    public IList<Language> SupportedLanguages { get; } = supportedLanguages;
+    public string TranslationsPath { get; } = translationsPath;
 
     public ITranslator CreateTranslator()
     {
