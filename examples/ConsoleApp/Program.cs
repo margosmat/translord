@@ -8,3 +8,9 @@ var path = Path.Combine(Directory.GetCurrentDirectory(), "translations");
 var translator = new TranslatorConfiguration(supportedLanguages, path).CreateTranslator();
 
 Console.WriteLine(translator.GetTranslation("label.test", Language.Polish));
+
+var translations = translator.GetAllTranslations(Language.English);
+foreach (var translation in translations)
+{
+    Console.WriteLine(translation.Value);
+}
