@@ -22,4 +22,9 @@
       </None>
     </ItemGroup>
 
+
+    <ItemGroup>
+      <PackageReference Include="Dumpify" Version="0.6.5" />
+    </ItemGroup>
+
 </Project>

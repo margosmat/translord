@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using Dumpify;
 using translord;
 using translord.Enums;
 
@@ -10,7 +11,7 @@ var translator = new TranslatorConfiguration(supportedLanguages, path).CreateTra
 Console.WriteLine(translator.GetTranslation("label.test", Language.Polish));
 
 var translations = translator.GetAllTranslations(Language.English);
-foreach (var translation in translations)
-{
-    Console.WriteLine(translation.Value);
-}
+translations.Dump();
+
+var rawJson = translator.GetAllTranslationsRawJson(Language.Polish);
+rawJson.Dump();

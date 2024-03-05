@@ -11,8 +11,9 @@ public sealed class Translator(TranslatorConfiguration config) : ITranslator
     {
         try
         {
-            var json = GetTranslationsJSON(language);
-            if (json.TryGetProperty(key, out var value))
+            var json = GetTranslationsJson(language);
+            var deserializedJson = JsonSerializer.Deserialize<JsonElement>(json);
+            if (deserializedJson.TryGetProperty(key, out var value))
             {
                 return value.GetString() ?? "";
             }
@@ -31,8 +32,9 @@ public sealed class Translator(TranslatorConfiguration config) : ITranslator
         List<Translation> translations;
         try
         {
-            var json = GetTranslationsJSON(language);
-            var enumerator = json.EnumerateObject();
+            var json = GetTranslationsJson(language);
+            var deserializedJson = JsonSerializer.Deserialize<JsonElement>(json);
+            var enumerator = deserializedJson.EnumerateObject();
 
             translations = enumerator.Select(x => new Translation
             {
@@ -50,10 +52,22 @@ public sealed class Translator(TranslatorConfiguration config) : ITranslator
         return translations;
     }
 
-    private JsonElement GetTranslationsJSON(Language language)
+    public string GetAllTranslationsRawJson(Language language)
+    {
+        try
+        {
+            return GetTranslationsJson(language);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    private string GetTranslationsJson(Language language)
     {
         var filePath = $@"{Config.TranslationsPath}/translations.{language.GetISOCode()}.json";
-        var json = File.ReadAllText(filePath);
-        return JsonSerializer.Deserialize<JsonElement>(json);
+        return File.ReadAllText(filePath);
     }
 }
