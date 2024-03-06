@@ -4,14 +4,16 @@ using translord.Models;
 
 namespace translord.Core;
 
-public sealed class Translator(TranslatorConfiguration config) : ITranslator
+internal sealed class Translator(TranslatorConfiguration config, TranslationsGetter translationsGetter) : ITranslator
 {
     public TranslatorConfiguration Config { get; } = config;
-    public string GetTranslation(string key, Language language)
+    public TranslationsGetter TranslationsGetter { get; private set; } = translationsGetter;
+
+    public async Task<string> GetTranslation(string key, Language language)
     {
         try
         {
-            var json = GetTranslationsJson(language);
+            var json = await TranslationsGetter.GetTranslationsJson(language);
             var deserializedJson = JsonSerializer.Deserialize<JsonElement>(json);
             if (deserializedJson.TryGetProperty(key, out var value))
             {
@@ -27,12 +29,12 @@ public sealed class Translator(TranslatorConfiguration config) : ITranslator
         return string.Empty;
     }
 
-    public IList<Translation> GetAllTranslations(Language language)
+    public async Task<IList<Translation>> GetAllTranslations(Language language)
     {
         List<Translation> translations;
         try
         {
-            var json = GetTranslationsJson(language);
+            var json = await TranslationsGetter.GetTranslationsJson(language);
             var deserializedJson = JsonSerializer.Deserialize<JsonElement>(json);
             var enumerator = deserializedJson.EnumerateObject();
 
@@ -52,22 +54,16 @@ public sealed class Translator(TranslatorConfiguration config) : ITranslator
         return translations;
     }
 
-    public string GetAllTranslationsRawJson(Language language)
+    public Task<string> GetAllTranslationsRawJson(Language language)
     {
         try
         {
-            return GetTranslationsJson(language);
+            return TranslationsGetter.GetTranslationsJson(language);
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             throw;
         }
-    }
-
-    private string GetTranslationsJson(Language language)
-    {
-        var filePath = $@"{Config.TranslationsPath}/translations.{language.GetISOCode()}.json";
-        return File.ReadAllText(filePath);
     }
 }

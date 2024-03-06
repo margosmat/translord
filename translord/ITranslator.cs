@@ -5,7 +5,7 @@ namespace translord;
 
 public interface ITranslator
 {
-    string GetTranslation(string key, Language language);
-    IList<Translation> GetAllTranslations(Language language);
-    string GetAllTranslationsRawJson(Language language);
+    Task<string> GetTranslation(string key, Language language);
+    Task<IList<Translation>> GetAllTranslations(Language language);
+    Task<string> GetAllTranslationsRawJson(Language language);
 }

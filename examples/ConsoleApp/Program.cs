@@ -8,10 +8,11 @@ List<Language> supportedLanguages = new() {Language.English, Language.Polish};
 var path = Path.Combine(Directory.GetCurrentDirectory(), "translations");
 var translator = new TranslatorConfiguration(supportedLanguages, path).CreateTranslator();
 
-Console.WriteLine(translator.GetTranslation("label.test", Language.Polish));
+var label = await translator.GetTranslation("label.test", Language.Polish);
+Console.WriteLine(label);
 
-var translations = translator.GetAllTranslations(Language.English);
+var translations = await translator.GetAllTranslations(Language.English);
 translations.Dump();
 
-var rawJson = translator.GetAllTranslationsRawJson(Language.Polish);
+var rawJson = await translator.GetAllTranslationsRawJson(Language.Polish);
 rawJson.Dump();
