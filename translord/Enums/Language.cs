@@ -3,7 +3,8 @@ namespace translord.Enums;
 public enum Language
 {
     English = 1,
-    Polish = 2
+    Polish = 2,
+    German = 3
 }
 
 public static class LanguageExtensions

@@ -14,5 +14,5 @@ Console.WriteLine(label);
 var translations = await translator.GetAllTranslations(Language.English);
 translations.Dump();
 
-var rawJson = await translator.GetAllTranslationsRawJson(Language.Polish);
+var rawJson = await translator.GetAllTranslationsRawJson(Language.German);
 rawJson.Dump();
