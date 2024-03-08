@@ -2,11 +2,12 @@
 
 using Dumpify;
 using translord;
+using translord.Core;
 using translord.Enums;
 
 List<Language> supportedLanguages = new() {Language.English, Language.Polish};
 var path = Path.Combine(Directory.GetCurrentDirectory(), "translations");
-var translator = new TranslatorConfiguration(supportedLanguages, path).CreateTranslator();
+var translator = new TranslatorConfiguration(supportedLanguages, new FileGetter(new FileGetterOptions(path))).CreateTranslator();
 
 var label = await translator.GetTranslation("label.test", Language.Polish);
 Console.WriteLine(label);

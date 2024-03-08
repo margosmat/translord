@@ -4,16 +4,16 @@ using translord.Models;
 
 namespace translord.Core;
 
-internal sealed class Translator(TranslatorConfiguration config, TranslationsGetter translationsGetter) : ITranslator
+internal sealed class Translator(TranslatorConfiguration config, ITranslationsGetter translationsGetter) : ITranslator
 {
-    public TranslatorConfiguration Config { get; } = config;
-    public TranslationsGetter TranslationsGetter { get; private set; } = translationsGetter;
+    private TranslatorConfiguration Config { get; } = config;
+    private ITranslationsGetter TranslationsGetter { get; } = translationsGetter;
 
     public async Task<string> GetTranslation(string key, Language language)
     {
         try
         {
-            var json = await TranslationsGetter.GetTranslationsJson(language);
+            var json = await TranslationsGetter.GetSerializedTranslations(language);
             var deserializedJson = JsonSerializer.Deserialize<JsonElement>(json);
             if (deserializedJson.TryGetProperty(key, out var value))
             {
@@ -34,7 +34,7 @@ internal sealed class Translator(TranslatorConfiguration config, TranslationsGet
         List<Translation> translations;
         try
         {
-            var json = await TranslationsGetter.GetTranslationsJson(language);
+            var json = await TranslationsGetter.GetSerializedTranslations(language);
             var deserializedJson = JsonSerializer.Deserialize<JsonElement>(json);
             var enumerator = deserializedJson.EnumerateObject();
 
@@ -58,7 +58,7 @@ internal sealed class Translator(TranslatorConfiguration config, TranslationsGet
     {
         try
         {
-            return TranslationsGetter.GetTranslationsJson(language);
+            return TranslationsGetter.GetSerializedTranslations(language);
         }
         catch (Exception e)
         {
