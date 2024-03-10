@@ -8,7 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{6D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "examples\ConsoleApp\ConsoleApp.csproj", "{13BDFA77-4820-4E80-9FFD-3D3529726335}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "translord.Postgres", "translord.Postgres\translord.Postgres.csproj", "{96A50C03-B4F3-4A54-B16E-CC91992D90FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "translord.EntityFramework", "translord.EntityFramework\translord.EntityFramework.csproj", "{96A50C03-B4F3-4A54-B16E-CC91992D90FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
