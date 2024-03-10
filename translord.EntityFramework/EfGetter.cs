@@ -1,14 +1,14 @@
 ﻿using translord.Enums;
 
-namespace translord.Postgres;
+namespace translord.EntityFramework;
 
-public record PostgresGetterOptions(string ConnectionString);
+public record EfGetterOptions(string ConnectionString);
 
-public class PostgresGetter : ITranslationsGetter
+public class EfGetter : ITranslationsGetter
 {
     TranslatorConfiguration? ITranslationsGetter.Config { get; set; }
 
-    public PostgresGetter(PostgresGetterOptions options)
+    public EfGetter(EfGetterOptions options)
     {
         
     }
