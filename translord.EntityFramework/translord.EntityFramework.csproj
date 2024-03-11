@@ -10,8 +10,9 @@
       <ProjectReference Include="..\translord\translord.csproj" />
     </ItemGroup>
 
+
     <ItemGroup>
-      <Folder Include="Data\" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.2" />
     </ItemGroup>
 
 </Project>
