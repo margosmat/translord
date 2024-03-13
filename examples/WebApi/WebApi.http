@@ -1,0 +1,4 @@
+GET https://localhost:7035/translations/2
+Accept: application/json
+
+###

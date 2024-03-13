@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "examples\Cons
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "translord.EntityFramework", "translord.EntityFramework\translord.EntityFramework.csproj", "{96A50C03-B4F3-4A54-B16E-CC91992D90FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "examples\WebApi\WebApi.csproj", "{11ED36F0-656A-4986-A438-539CAE72CACC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,7 @@ Global
 		{620117CD-D3D2-419D-BE8D-C545438A4A99} = {EF1DD318-5400-4DA8-8D68-BAD15B855322}
 		{13BDFA77-4820-4E80-9FFD-3D3529726335} = {6DD0CFFB-AFB5-41C6-B6BA-B0C753B5BA96}
 		{96A50C03-B4F3-4A54-B16E-CC91992D90FB} = {EF1DD318-5400-4DA8-8D68-BAD15B855322}
+		{11ED36F0-656A-4986-A438-539CAE72CACC} = {6DD0CFFB-AFB5-41C6-B6BA-B0C753B5BA96}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{620117CD-D3D2-419D-BE8D-C545438A4A99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -33,5 +36,9 @@ Global
 		{96A50C03-B4F3-4A54-B16E-CC91992D90FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96A50C03-B4F3-4A54-B16E-CC91992D90FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96A50C03-B4F3-4A54-B16E-CC91992D90FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11ED36F0-656A-4986-A438-539CAE72CACC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11ED36F0-656A-4986-A438-539CAE72CACC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11ED36F0-656A-4986-A438-539CAE72CACC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11ED36F0-656A-4986-A438-539CAE72CACC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
