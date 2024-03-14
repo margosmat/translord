@@ -1,4 +1,4 @@
-GET https://localhost:7035/translations/2
+GET https://localhost:7035/translations/1/label.hello
 Accept: application/json
 
 ###

@@ -20,13 +20,15 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/translations/{language}", async (Language language) =>
+app.MapGet("/translations/{language}/{key?}", async (Language language, string? key) =>
     {
         List<Language> supportedLanguages = new() {Language.English, Language.Polish};
         var path = Path.Combine(Directory.GetCurrentDirectory(), "translations");
         var translator = new TranslatorConfiguration(supportedLanguages, new FileGetter(new FileGetterOptions(path))).CreateTranslator();
 
-        return await translator.GetAllTranslationsRawJson(language);
+        if (key is null) return await translator.GetAllTranslationsRawJson(language);
+
+        return await translator.GetTranslation(key, language);
     })
     .WithName("GetTranslations")
     .WithOpenApi();
