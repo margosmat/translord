@@ -1,5 +1,6 @@
 using translord;
 using translord.Core;
+using translord.EntityFramework.Postgres;
 using translord.Enums;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddTranslordPostgresStore(options => options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty);
 
 var app = builder.Build();
 
