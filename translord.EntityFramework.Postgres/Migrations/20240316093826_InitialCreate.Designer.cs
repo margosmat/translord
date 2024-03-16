@@ -11,7 +11,7 @@ using translord.EntityFramework.Postgres;
 namespace translord.EntityFramework.Postgres.Migrations
 {
     [DbContext(typeof(TranslationsPostgresDbContext))]
-    [Migration("20240315210026_InitialCreate")]
+    [Migration("20240316093826_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -36,7 +36,7 @@ namespace translord.EntityFramework.Postgres.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Key");
+                    b.HasKey("Key", "Language");
 
                     b.ToTable("Translations");
                 });

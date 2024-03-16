@@ -2,3 +2,8 @@ GET https://localhost:7035/translations/1/label.hello
 Accept: application/json
 
 ###
+
+GET https://localhost:7035/translations-ef/2/label.hello
+Accept: application/json
+
+###

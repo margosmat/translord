@@ -5,14 +5,12 @@ using translord.Enums;
 
 namespace translord.EntityFramework;
 
-public record EfGetterOptions(string ConnectionString);
-
 public class EfGetter : ITranslationsGetter
 {
     private readonly TranslationsDbContext _context;
     TranslatorConfiguration? ITranslationsGetter.Config { get; set; }
 
-    public EfGetter(EfGetterOptions options, TranslationsDbContext context)
+    public EfGetter(TranslationsDbContext context)
     {
         _context = context;
     }

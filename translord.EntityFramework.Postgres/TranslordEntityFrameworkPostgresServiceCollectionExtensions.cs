@@ -9,7 +9,7 @@ public record AddTranslordPostgresStoreOptions
     public string ConnectionString { get; set; }
 }
 
-public static class TranslordServiceCollectionExtensions
+public static class TranslordEntityFrameworkPostgresServiceCollectionExtensions
 {
     public static IServiceCollection AddTranslordPostgresStore(this IServiceCollection services,
         Action<AddTranslordPostgresStoreOptions> setupAction)

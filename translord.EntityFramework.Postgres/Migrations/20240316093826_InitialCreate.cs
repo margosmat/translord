@@ -15,12 +15,12 @@ namespace translord.EntityFramework.Postgres.Migrations
                 columns: table => new
                 {
                     Key = table.Column<string>(type: "text", nullable: false),
-                    Value = table.Column<string>(type: "text", nullable: false),
-                    Language = table.Column<int>(type: "integer", nullable: false)
+                    Language = table.Column<int>(type: "integer", nullable: false),
+                    Value = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Translations", x => x.Key);
+                    table.PrimaryKey("PK_Translations", x => new { x.Key, x.Language });
                 });
         }
 

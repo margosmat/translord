@@ -1,5 +1,6 @@
 using translord;
 using translord.Core;
+using translord.EntityFramework;
 using translord.EntityFramework.Postgres;
 using translord.Enums;
 
@@ -9,7 +10,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddTranslordPostgresStore(options => options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty);
+builder.Services.AddTranslordPostgresStore(options =>
+    options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty);
+builder.Services.AddTranslordEfGetter();
+builder.Services.AddTranslord(o =>
+{
+    List<Language> supportedLanguages = new() {Language.English, Language.Polish};
+    o.SupportedLanguages = supportedLanguages;
+    o.IsCachingEnabled = true;
+});
 
 var app = builder.Build();
 
@@ -26,13 +35,25 @@ app.MapGet("/translations/{language}/{key?}", async (Language language, string? 
     {
         List<Language> supportedLanguages = new() {Language.English, Language.Polish};
         var path = Path.Combine(Directory.GetCurrentDirectory(), "translations");
-        var translator = new TranslatorConfiguration(supportedLanguages, new FileGetter(new FileGetterOptions(path))).CreateTranslator();
+        var translator =
+            new TranslatorConfiguration(
+                new TranslatorConfigurationOptions { SupportedLanguages = supportedLanguages, IsCachingEnabled = true },
+                new FileGetter(new FileGetterOptions(path))).CreateTranslator();
 
         if (key is null) return await translator.GetAllTranslationsRawJson(language);
 
         return await translator.GetTranslation(key, language);
     })
     .WithName("GetTranslations")
+    .WithOpenApi();
+
+app.MapGet("/translations-ef/{language}/{key?}", async (Language language, string? key, ITranslator translator) =>
+    {
+        if (key is null) return await translator.GetAllTranslationsRawJson(language);
+
+        return await translator.GetTranslation(key, language);
+    })
+    .WithName("GetTranslationsWithEF")
     .WithOpenApi();
 
 app.Run();

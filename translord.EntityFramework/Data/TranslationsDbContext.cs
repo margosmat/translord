@@ -5,14 +5,14 @@ namespace translord.EntityFramework.Data;
 
 public class TranslationsDbContext : DbContext
 {
-    public DbSet<Translation> Translations { get; set; }
+    public required DbSet<Translation> Translations { get; set; }
 
-    public TranslationsDbContext() : base()
+    public TranslationsDbContext() {}
+
+    public TranslationsDbContext(DbContextOptions options) : base(options)
     {
-        this.Database.EnsureCreated();
+        Database.EnsureCreated();
     }
-
-    public TranslationsDbContext(DbContextOptions options) : base(options) {}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

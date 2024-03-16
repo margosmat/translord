@@ -33,7 +33,7 @@ namespace translord.EntityFramework.Postgres.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Key");
+                    b.HasKey("Key", "Language");
 
                     b.ToTable("Translations");
                 });

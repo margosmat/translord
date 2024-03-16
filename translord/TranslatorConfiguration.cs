@@ -3,10 +3,16 @@ using translord.Enums;
 
 namespace translord;
 
-public class TranslatorConfiguration(IList<Language> supportedLanguages, ITranslationsGetter getter, bool isCachingEnabled = true)
+public record TranslatorConfigurationOptions
 {
-    public IList<Language> SupportedLanguages { get; } = supportedLanguages;
-    public bool IsCachingEnabled { get; } = isCachingEnabled;
+    public IList<Language> SupportedLanguages { get; set; }
+    public bool IsCachingEnabled { get; set; }
+}
+
+public class TranslatorConfiguration(TranslatorConfigurationOptions options, ITranslationsGetter getter)
+{
+    public IList<Language> SupportedLanguages { get; } = options.SupportedLanguages;
+    public bool IsCachingEnabled { get; } = options.IsCachingEnabled;
     private ITranslationsGetter TranslationsGetter { get; } = getter;
 
     public ITranslator CreateTranslator()
