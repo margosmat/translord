@@ -3,6 +3,7 @@ using translord.Core;
 using translord.EntityFramework;
 using translord.EntityFramework.Postgres;
 using translord.Enums;
+using WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTranslordPostgresStore(options =>
     options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty);
-builder.Services.AddTranslordEfGetter();
+builder.Services.AddTranslordCustomGetter<CustomTranslationsGetter>();
 builder.Services.AddTranslord(o =>
 {
     List<Language> supportedLanguages = new() {Language.English, Language.Polish};

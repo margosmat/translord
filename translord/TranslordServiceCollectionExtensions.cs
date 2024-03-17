@@ -15,4 +15,10 @@ public static class TranslordServiceCollectionExtensions
         });
         return services;
     }
+    
+    public static IServiceCollection AddTranslordCustomGetter<T>(this IServiceCollection services) where T : class, ITranslationsGetter
+    {
+        services.AddTransient<ITranslationsGetter, T>();
+        return services;
+    }
 }
