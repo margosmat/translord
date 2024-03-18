@@ -4,9 +4,9 @@ namespace translord.EntityFramework;
 
 public static class TranslordEntityFrameworkServiceCollectionExtensions
 {
-    public static IServiceCollection AddTranslordEfGetter(this IServiceCollection services)
+    public static IServiceCollection AddTranslordEfStore(this IServiceCollection services)
     {
-        services.AddTransient<ITranslationsGetter, EfGetter>();
+        services.AddTransient<ITranslationsStore, EfStore>();
         return services;
     }
 }

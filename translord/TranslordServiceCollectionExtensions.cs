@@ -10,15 +10,15 @@ public static class TranslordServiceCollectionExtensions
         setupOptions(options);
         services.AddTransient<ITranslator>(x =>
         {
-            var config = new TranslatorConfiguration(options, x.GetRequiredService<ITranslationsGetter>());
+            var config = new TranslatorConfiguration(options, x.GetRequiredService<ITranslationsStore>());
             return config.CreateTranslator();
         });
         return services;
     }
     
-    public static IServiceCollection AddTranslordCustomGetter<T>(this IServiceCollection services) where T : class, ITranslationsGetter
+    public static IServiceCollection AddTranslordCustomStore<T>(this IServiceCollection services) where T : class, ITranslationsStore
     {
-        services.AddTransient<ITranslationsGetter, T>();
+        services.AddTransient<ITranslationsStore, T>();
         return services;
     }
 }

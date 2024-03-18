@@ -4,7 +4,7 @@ using translord.Enums;
 
 namespace WebApi;
 
-public class CustomTranslationsGetter : ITranslationsGetter
+public class CustomTranslationsStore : ITranslationsStore
 {
     public Task<string> GetSerializedTranslations(Language language)
     {
@@ -28,5 +28,5 @@ public class CustomTranslationsGetter : ITranslationsGetter
         }
     }
 
-    TranslatorConfiguration? ITranslationsGetter.Config { get; set; }
+    TranslatorConfiguration? ITranslationsStore.Config { get; set; }
 }

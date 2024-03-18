@@ -10,7 +10,7 @@ var path = Path.Combine(Directory.GetCurrentDirectory(), "translations");
 var translator =
     new TranslatorConfiguration(
         new TranslatorConfigurationOptions { SupportedLanguages = supportedLanguages, IsCachingEnabled = true },
-        new FileGetter(new FileGetterOptions(path))).CreateTranslator();
+        new FileStore(new FileStoreOptions(path))).CreateTranslator();
 
 var label = await translator.GetTranslation("label.test", Language.Polish);
 Console.WriteLine(label);

@@ -5,12 +5,12 @@ using translord.Enums;
 
 namespace translord.EntityFramework;
 
-public class EfGetter : ITranslationsGetter
+public class EfStore : ITranslationsStore
 {
     private readonly TranslationsDbContext _context;
-    TranslatorConfiguration? ITranslationsGetter.Config { get; set; }
+    TranslatorConfiguration? ITranslationsStore.Config { get; set; }
 
-    public EfGetter(TranslationsDbContext context)
+    public EfStore(TranslationsDbContext context)
     {
         _context = context;
     }

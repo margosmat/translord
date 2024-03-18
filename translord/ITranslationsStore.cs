@@ -2,7 +2,7 @@ using translord.Enums;
 
 namespace translord;
 
-public interface ITranslationsGetter
+public interface ITranslationsStore
 {
     Task<string> GetSerializedTranslations(Language language);
     TranslatorConfiguration? Config { get; set; }

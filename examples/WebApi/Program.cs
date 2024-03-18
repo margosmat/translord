@@ -13,7 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTranslordPostgresStore(options =>
     options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty);
-builder.Services.AddTranslordCustomGetter<CustomTranslationsGetter>();
+builder.Services.AddTranslordCustomStore<CustomTranslationsStore>();
 builder.Services.AddTranslord(o =>
 {
     List<Language> supportedLanguages = new() {Language.English, Language.Polish};
@@ -39,7 +39,7 @@ app.MapGet("/translations/{language}/{key?}", async (Language language, string? 
         var translator =
             new TranslatorConfiguration(
                 new TranslatorConfigurationOptions { SupportedLanguages = supportedLanguages, IsCachingEnabled = true },
-                new FileGetter(new FileGetterOptions(path))).CreateTranslator();
+                new FileStore(new FileStoreOptions(path))).CreateTranslator();
 
         if (key is null) return await translator.GetAllTranslationsRawJson(language);
 

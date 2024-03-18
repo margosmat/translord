@@ -2,17 +2,17 @@ using translord.Enums;
 
 namespace translord.Core;
 
-public record FileGetterOptions(string TranslationsPath);
+public record FileStoreOptions(string TranslationsPath);
 
-public sealed class FileGetter(FileGetterOptions options) : ITranslationsGetter
+public sealed class FileStore(FileStoreOptions options) : ITranslationsStore
 {
-    TranslatorConfiguration? ITranslationsGetter.Config { get; set; }
+    TranslatorConfiguration? ITranslationsStore.Config { get; set; }
     private string TranslationsPath { get; } = options.TranslationsPath;
     private IDictionary<Language, string> TranslationsCache { get; } = new Dictionary<Language, string>();
 
     public async Task<string> GetSerializedTranslations(Language language)
     {
-        if (((ITranslationsGetter)this).Config is { IsCachingEnabled: true } && TranslationsCache.TryGetValue(language, out var json))
+        if (((ITranslationsStore)this).Config is { IsCachingEnabled: true } && TranslationsCache.TryGetValue(language, out var json))
         {
             return json;
         }

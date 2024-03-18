@@ -9,15 +9,15 @@ public record TranslatorConfigurationOptions
     public bool IsCachingEnabled { get; set; }
 }
 
-public class TranslatorConfiguration(TranslatorConfigurationOptions options, ITranslationsGetter getter)
+public class TranslatorConfiguration(TranslatorConfigurationOptions options, ITranslationsStore store)
 {
     public IList<Language> SupportedLanguages { get; } = options.SupportedLanguages;
     public bool IsCachingEnabled { get; } = options.IsCachingEnabled;
-    private ITranslationsGetter TranslationsGetter { get; } = getter;
+    private ITranslationsStore TranslationsStore { get; } = store;
 
     public ITranslator CreateTranslator()
     {
-        TranslationsGetter.Config = this;
-        return new Translator(this, TranslationsGetter);
+        TranslationsStore.Config = this;
+        return new Translator(this, TranslationsStore);
     }
 }
