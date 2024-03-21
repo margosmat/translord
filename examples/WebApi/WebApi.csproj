@@ -24,6 +24,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\translord.EntityFramework.Postgres\translord.EntityFramework.Postgres.csproj" />
+      <ProjectReference Include="..\..\translord.Manager\translord.Manager.csproj" />
       <ProjectReference Include="..\..\translord\translord.csproj" />
     </ItemGroup>
 

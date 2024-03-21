@@ -3,6 +3,7 @@ using translord.Core;
 using translord.EntityFramework;
 using translord.EntityFramework.Postgres;
 using translord.Enums;
+using translord.Manager;
 using WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,7 @@ builder.Services.AddTranslord(o =>
     o.SupportedLanguages = supportedLanguages;
     o.IsCachingEnabled = true;
 });
+builder.AddTranslordManager();
 
 var app = builder.Build();
 
@@ -56,5 +58,7 @@ app.MapGet("/translations-ef/{language}/{key?}", async (Language language, strin
     })
     .WithName("GetTranslationsWithEF")
     .WithOpenApi();
+
+app.UseTranslordManager();
 
 app.Run();
