@@ -9,7 +9,7 @@ public class TranslationsDbContext : DbContext
 
     public TranslationsDbContext() {}
 
-    public TranslationsDbContext(DbContextOptions options) : base(options)
+    public TranslationsDbContext(DbContextOptions<TranslationsDbContext> options) : base(options)
     {
         Database.EnsureCreated();
     }

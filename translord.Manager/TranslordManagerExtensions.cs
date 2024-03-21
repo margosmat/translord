@@ -1,6 +1,8 @@
+using System.Reflection;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using translord.Manager.Components;
 using translord.Manager.Components.Account;
 using translord.Manager.Data;
@@ -27,8 +29,8 @@ public static class TranslordManagerExtensions
             })
             .AddIdentityCookies();
 
-        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
-                               throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+        var connectionString = builder.Configuration.GetConnectionString("ManagerConnection") ??
+                               throw new InvalidOperationException("Connection string 'ManagerConnection' not found.");
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlite(connectionString));
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -58,6 +60,11 @@ public static class TranslordManagerExtensions
         }
 
         app.UseStaticFiles();
+        var location = Assembly.GetEntryAssembly().Location;
+        var path = location.Remove(location.LastIndexOf('/'));
+        app.UseStaticFiles(new StaticFileOptions {
+            FileProvider = new PhysicalFileProvider(path + "/wwwroot")
+        });
         app.UseAntiforgery();
 
         app.MapRazorComponents<App>()
