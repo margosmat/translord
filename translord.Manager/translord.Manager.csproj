@@ -6,11 +6,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>aspnet-translord.Manager-371988E9-EA43-44C9-8B25-9B12C86D6A56</UserSecretsId>
         <RootNamespace>translord.Manager</RootNamespace>
+        <OutputType>Library</OutputType>
     </PropertyGroup>
-
-    <ItemGroup>
-        <None Update="Data\app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true"/>
-    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.1"/>
