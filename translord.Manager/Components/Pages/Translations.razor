@@ -1,0 +1,41 @@
+@page "/translations"
+@using translord;
+@using translord.Enums
+@using translord.Models
+@inject ITranslator Translator
+
+<h3>Translations</h3>
+@if (Data.Any())
+{
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Key</th>
+        <th>Value</th>
+        <th>Lang</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+@foreach (Translation item in Data)
+      {
+        <tr>
+          <td>@item.Key</td>
+          <td>@item.Value</td>
+          <td>@item.Language</td>
+        </tr>
+      }
+
+    </tbody>
+  </table>
+}
+
+@code {
+    private IList<Translation> Data = new List<Translation>();
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        Data = await Translator.GetAllTranslations(Language.Polish);
+    }
+}
