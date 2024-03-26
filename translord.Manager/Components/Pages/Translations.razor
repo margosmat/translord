@@ -2,40 +2,24 @@
 @using translord;
 @using translord.Enums
 @using translord.Models
+@using Microsoft.AspNetCore.Components.QuickGrid
 @inject ITranslator Translator
 
 <h3>Translations</h3>
-@if (Data.Any())
-{
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Key</th>
-        <th>Value</th>
-        <th>Lang</th>
-      </tr>
-    </thead>
-    <tbody>
-      
-@foreach (Translation item in Data)
-      {
-        <tr>
-          <td>@item.Key</td>
-          <td>@item.Value</td>
-          <td>@item.Language</td>
-        </tr>
-      }
 
-    </tbody>
-  </table>
-}
+<QuickGrid Items="@itemsQueryable">
+  <PropertyColumn Property="@(x => x.Key)" Sortable="true" />
+  <PropertyColumn Property="@(x => x.Value)" Sortable="true" />
+  <PropertyColumn Property="@(x => x.Language)" Sortable="true" />
+</QuickGrid>
 
 @code {
-    private IList<Translation> Data = new List<Translation>();
+    IQueryable<Translation>? itemsQueryable;
     
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        Data = await Translator.GetAllTranslations(Language.Polish);
+        var translations = await Translator.GetAllTranslations(Language.Polish);
+        itemsQueryable = translations.AsQueryable();
     }
 }
