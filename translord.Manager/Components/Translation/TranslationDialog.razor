@@ -1,0 +1,16 @@
+@using translord.Models
+@implements IDialogContentComponent<Translation>
+
+<p>
+    @Content.Key
+    @Content.Value
+    @Content.Language
+</p>
+
+@code {
+    [Parameter]
+    public Translation Content { get; set; } = default!;
+
+    [CascadingParameter]
+    public FluentDialog? Dialog { get; set; }
+}

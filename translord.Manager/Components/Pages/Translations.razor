@@ -3,14 +3,19 @@
 @using translord.Enums
 @using translord.Models
 @using Microsoft.AspNetCore.Components.QuickGrid
+@using translord.Manager.Components.Translation
 @inject ITranslator Translator
+@inject IDialogService DialogService
 
 <h3>Translations</h3>
 
 <QuickGrid Items="@itemsQueryable">
-  <PropertyColumn Property="@(x => x.Key)" Sortable="true" />
-  <PropertyColumn Property="@(x => x.Value)" Sortable="true" />
-  <PropertyColumn Property="@(x => x.Language)" Sortable="true" />
+  <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(x => x.Key)" Sortable="true" />
+  <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(x => x.Value)" Sortable="true" />
+  <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(x => x.Language)" Sortable="true" />
+  <Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn Title="Actions">
+    <FluentButton @onclick="@(() => OpenDialogAsync(context))">Edit</FluentButton>
+  </Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn>
 </QuickGrid>
 
 @code {
@@ -22,4 +27,23 @@
         var translations = await Translator.GetAllTranslations(Language.Polish);
         itemsQueryable = translations.AsQueryable();
     }
+
+    private async Task OpenDialogAsync(Translation t)
+    {
+        DialogParameters parameters = new()
+        {
+            Title = t.Key,
+            PrimaryAction = "Save",
+            PrimaryActionEnabled = true,
+            SecondaryAction = "Cancel",
+            Width = "500px",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true
+        };
+
+        IDialogReference dialog = await DialogService.ShowDialogAsync<TranslationDialog>(t, parameters);
+        DialogResult? result = await dialog.Result;
+    }
+
 }

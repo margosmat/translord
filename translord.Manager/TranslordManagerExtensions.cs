@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.FluentUI.AspNetCore.Components;
 using translord.Manager.Components;
 using translord.Manager.Components.Account;
 using translord.Manager.Data;
@@ -41,6 +42,8 @@ public static class TranslordManagerExtensions
             .AddDefaultTokenProviders();
 
         builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+        builder.Services.AddHttpClient();
+        builder.Services.AddFluentUIComponents();
 
         return builder;
     }
