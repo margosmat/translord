@@ -13,7 +13,10 @@
         <article class="content px-4">
             @Body
         </article>
-        <FluentDialogProvider />
+        <FluentToastProvider />
+        <FluentDialogProvider @rendermode="RenderMode.InteractiveServer" />
+        <FluentTooltipProvider />
+        <FluentMessageBarProvider />
     </main>
 </div>
 
