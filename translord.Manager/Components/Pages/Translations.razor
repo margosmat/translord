@@ -2,23 +2,28 @@
 @using translord;
 @using translord.Enums
 @using translord.Models
+@using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using translord.Manager.Components.Translation
 @inject ITranslator Translator
 @inject IDialogService DialogService
 
+@attribute [Authorize]
+
 @rendermode RenderMode.InteractiveServer
 
-<h3>Translations</h3>
+<AuthorizeView>
+    <h3>Translations</h3>
 
-<QuickGrid Items="@itemsQueryable">
-  <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(x => x.Key)" Sortable="true" />
-  <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(x => x.Value)" Sortable="true" />
-  <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(x => x.Language)" Sortable="true" />
-  <Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn Title="Actions">
-    <FluentButton @onclick="@(() => OpenDialogAsync(context))">Edit</FluentButton>
-  </Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn>
-</QuickGrid>
+    <QuickGrid Items="@itemsQueryable">
+      <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(x => x.Key)" Sortable="true" />
+      <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(x => x.Value)" Sortable="true" />
+      <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(x => x.Language)" Sortable="true" />
+      <Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn Title="Actions" Context="actionsContext">
+        <FluentButton @onclick="@(() => OpenDialogAsync(actionsContext))">Edit</FluentButton>
+      </Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn>
+    </QuickGrid>
+</AuthorizeView>
 
 @code {
     IQueryable<Translation>? itemsQueryable;
