@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using translord.Enums;
 using translord.Models;
@@ -29,21 +30,22 @@ internal sealed class Translator(TranslatorConfiguration config, ITranslationsSt
         return string.Empty;
     }
 
-    public async Task<IList<Translation>> GetAllTranslations(Language language)
+    public async Task<IList<Translation>> GetAllTranslations(Language? language)
     {
         List<Translation> translations;
         try
         {
-            var json = await TranslationsStore.GetSerializedTranslations(language);
-            var deserializedJson = JsonSerializer.Deserialize<JsonElement>(json);
-            var enumerator = deserializedJson.EnumerateObject();
-
-            translations = enumerator.Select(x => new Translation
+            if (language.HasValue)
             {
-                Language = language,
-                Key = x.Name,
-                Value = x.Value.GetString() ?? ""
-            }).ToList();
+                translations = await GetSingleLanguageTranslations(language.Value);
+            }
+            else
+            {
+                var allLanguagesTranslationsTasks =
+                    Config.SupportedLanguages.Select(async x => await GetSingleLanguageTranslations(x));
+                var allLanguagesTranslations = await Task.WhenAll(allLanguagesTranslationsTasks);
+                translations = allLanguagesTranslations.SelectMany(x => x).ToList();
+            }
         }
         catch (Exception e)
         {
@@ -52,6 +54,21 @@ internal sealed class Translator(TranslatorConfiguration config, ITranslationsSt
         }
 
         return translations;
+    }
+
+    private async Task<List<Translation>> GetSingleLanguageTranslations(Language language)
+    {
+        var json = await TranslationsStore.GetSerializedTranslations(language);
+
+        var deserializedJson = JsonSerializer.Deserialize<JsonElement>(json);
+        var enumerator = deserializedJson.EnumerateObject();
+
+        return enumerator.Select(x => new Translation
+        {
+            Language = language,
+            Key = x.Name,
+            Value = x.Value.GetString() ?? ""
+        }).ToList();
     }
 
     public Task<string> GetAllTranslationsRawJson(Language language)

@@ -25,14 +25,13 @@
     </QuickGrid>
 </AuthorizeView>
 
-
 @code {
     IQueryable<Translation>? itemsQueryable;
     
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        var translations = await Translator.GetAllTranslations(Language.Polish);
+        var translations = await Translator.GetAllTranslations();
         itemsQueryable = translations.AsQueryable();
     }
 
