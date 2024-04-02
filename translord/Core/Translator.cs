@@ -35,14 +35,15 @@ internal sealed class Translator(TranslatorConfiguration config, ITranslationsSt
         List<Translation> translations;
         try
         {
+            var allKeys = await TranslationsStore.GetAllKeys();
             if (language.HasValue)
             {
-                translations = await GetSingleLanguageTranslations(language.Value);
+                translations = await GetSingleLanguageTranslations(allKeys, language.Value);
             }
             else
             {
                 var allLanguagesTranslationsTasks =
-                    Config.SupportedLanguages.Select(async x => await GetSingleLanguageTranslations(x));
+                    Config.SupportedLanguages.Select(async x => await GetSingleLanguageTranslations(allKeys, x));
                 var allLanguagesTranslations = await Task.WhenAll(allLanguagesTranslationsTasks);
                 translations = allLanguagesTranslations.SelectMany(x => x).ToList();
             }
@@ -56,18 +57,27 @@ internal sealed class Translator(TranslatorConfiguration config, ITranslationsSt
         return translations;
     }
 
-    private async Task<List<Translation>> GetSingleLanguageTranslations(Language language)
+    private async Task<List<Translation>> GetSingleLanguageTranslations(List<string> allKeys, Language language)
     {
         var json = await TranslationsStore.GetSerializedTranslations(language);
+        var jsonElements = new List<JsonProperty>();
 
-        var deserializedJson = JsonSerializer.Deserialize<JsonElement>(json);
-        var enumerator = deserializedJson.EnumerateObject();
-
-        return enumerator.Select(x => new Translation
+        if (!json.Equals(String.Empty))
         {
-            Language = language,
-            Key = x.Name,
-            Value = x.Value.GetString() ?? ""
+            var deserializedJson = JsonSerializer.Deserialize<JsonElement>(json);
+            jsonElements = deserializedJson.EnumerateObject().ToList();
+        }
+
+        return allKeys.Select(x =>
+        {
+            var matchingElement = jsonElements.Find(y => y.Name.Equals(x));
+            var value = matchingElement.Value.ValueKind == JsonValueKind.Undefined ? String.Empty : matchingElement.Value.GetString();
+            return new Translation
+            {
+                Language = language,
+                Key = x,
+                Value = value ?? string.Empty
+            };
         }).ToList();
     }
 

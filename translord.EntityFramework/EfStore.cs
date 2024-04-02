@@ -8,6 +8,7 @@ namespace translord.EntityFramework;
 public class EfStore : ITranslationsStore
 {
     private readonly TranslationsDbContext _context;
+
     TranslatorConfiguration? ITranslationsStore.Config { get; set; }
 
     public EfStore(TranslationsDbContext context)
@@ -20,5 +21,11 @@ public class EfStore : ITranslationsStore
         var translations = _context.Translations.Where(x => x.Language == language);
         var json = JsonSerializer.Serialize(await translations.ToDictionaryAsync(x => x.Key, x => x.Value));
         return json;
+    }
+    
+    public async Task<List<string>> GetAllKeys()
+    {
+        var allKeys = _context.Translations.Select(x => x.Key).Distinct();
+        return await allKeys.ToListAsync();
     }
 }

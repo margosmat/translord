@@ -15,6 +15,7 @@ public static class LanguageExtensions
         {
             case Language.English: return "en";
             case Language.Polish: return "pl";
+            case Language.German: return "de";
             default: throw new NotImplementedException("Language is not implemented yet.");
         }
     }

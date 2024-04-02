@@ -17,7 +17,7 @@ builder.Services.AddTranslordPostgresStore(options =>
 builder.Services.AddTranslordCustomStore<CustomTranslationsStore>();
 builder.Services.AddTranslord(o =>
 {
-    List<Language> supportedLanguages = new() {Language.English, Language.Polish};
+    List<Language> supportedLanguages = new() {Language.English, Language.Polish, Language.German};
     o.SupportedLanguages = supportedLanguages;
     o.IsCachingEnabled = true;
 });

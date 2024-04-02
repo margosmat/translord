@@ -28,5 +28,10 @@ public class CustomTranslationsStore : ITranslationsStore
         }
     }
 
+    public Task<List<string>> GetAllKeys()
+    {
+        return Task.FromResult(new List<string> {"label.test", "label.hello"});
+    }
+
     TranslatorConfiguration? ITranslationsStore.Config { get; set; }
 }
