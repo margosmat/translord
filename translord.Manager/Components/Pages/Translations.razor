@@ -15,10 +15,14 @@
 <AuthorizeView>
     <h3>Translations</h3>
 
-    <QuickGrid Items="@itemsQueryable">
+    <QuickGrid Items="@_itemsQueryable">
       <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(x => x.Key)" Sortable="true" />
-      <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(x => x.Value)" Sortable="true" />
-      <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(x => x.Language)" Sortable="true" />
+      @foreach (var lang in Translator.GetSupportedLanguages())
+      {
+          <Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn Title="@(lang.GetName())" Context="langContext" Sortable="true">
+              @(langContext.First(y => y.Language == lang).Value)
+          </Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn>
+      }
       <Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn Title="Actions" Context="actionsContext">
         <FluentButton @onclick="@(() => OpenDialogAsync(actionsContext))">Edit</FluentButton>
       </Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn>
@@ -26,16 +30,16 @@
 </AuthorizeView>
 
 @code {
-    IQueryable<Translation>? itemsQueryable;
+    IQueryable<IGrouping<string, Translation>>? _itemsQueryable;
     
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         var translations = await Translator.GetAllTranslations();
-        itemsQueryable = translations.AsQueryable();
+        _itemsQueryable = translations.GroupBy(x => x.Key).AsQueryable();
     }
 
-    private async Task OpenDialogAsync(Translation t)
+    private async Task OpenDialogAsync(IGrouping<string, Translation> t)
     {
         DialogParameters parameters = new()
         {

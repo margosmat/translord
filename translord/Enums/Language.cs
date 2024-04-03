@@ -19,4 +19,15 @@ public static class LanguageExtensions
             default: throw new NotImplementedException("Language is not implemented yet.");
         }
     }
+    
+    public static string GetName(this Language language)
+    {
+        switch (language)
+        {
+            case Language.English: return "English";
+            case Language.Polish: return "Polish";
+            case Language.German: return "German";
+            default: throw new NotImplementedException("Language is not implemented yet.");
+        }
+    }
 }

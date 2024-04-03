@@ -1,15 +1,20 @@
 @using translord.Models
-@implements IDialogContentComponent<Translation>
+@using translord.Enums
+@inject ITranslator Translator
+@implements IDialogContentComponent<IGrouping<string, Translation>>
 
 <FluentDialogBody>
     <p>
         @Content.Key
-        @Content.Value
-        @Content.Language
+        Translations:
+        @foreach (var lang in Translator.GetSupportedLanguages())
+        {
+            <span>@(lang.GetName()): @(@Content.First(x => x.Language == lang).Value)</span>
+        }
     </p>
 </FluentDialogBody>
 
 @code {
     [Parameter]
-    public Translation Content { get; set; } = default!;
+    public IGrouping<string, Translation> Content { get; set; } = default!;
 }

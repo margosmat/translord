@@ -93,4 +93,9 @@ internal sealed class Translator(TranslatorConfiguration config, ITranslationsSt
             throw;
         }
     }
+
+    public List<Language> GetSupportedLanguages()
+    {
+        return Config.SupportedLanguages.ToList();
+    }
 }
