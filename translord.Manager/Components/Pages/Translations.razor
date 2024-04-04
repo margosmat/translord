@@ -19,7 +19,7 @@
       <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(x => x.Key)" Sortable="true" />
       @foreach (var lang in Translator.GetSupportedLanguages())
       {
-          <Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn Title="@(lang.GetName())" Context="langContext" Sortable="true">
+          <Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn Title="@(lang.GetName())" Context="langContext">
               @(langContext.First(y => y.Language == lang).Value)
           </Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn>
       }
