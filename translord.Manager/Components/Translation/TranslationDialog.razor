@@ -9,7 +9,7 @@
         Translations:
         @foreach (var lang in Translator.GetSupportedLanguages())
         {
-            <span>@(lang.GetName()): @(@Content.First(x => x.Language == lang).Value)</span>
+            <FluentTextField @bind-Value="@Content.First(x => x.Language == lang).Value" Label="@lang.GetName()"></FluentTextField>
         }
     </p>
 </FluentDialogBody>

@@ -55,6 +55,11 @@
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<TranslationDialog>(t, parameters);
         DialogResult? result = await dialog.Result;
+        var data = result.Data as IGrouping<string, Translation>;
+        foreach (var translation in data)
+        {
+            Console.WriteLine($@"{translation.Key}{translation.Language}{translation.Value}");
+        }
     }
 
 }
