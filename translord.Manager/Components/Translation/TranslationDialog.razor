@@ -1,7 +1,8 @@
 @using translord.Models
 @using translord.Enums
+@using translord.Manager.Components.Pages
 @inject ITranslator Translator
-@implements IDialogContentComponent<IGrouping<string, Translation>>
+@implements IDialogContentComponent<translord.Manager.Components.Pages.Translations.GroupedTranslation>
 
 <FluentDialogBody>
     <p>
@@ -9,12 +10,12 @@
         Translations:
         @foreach (var lang in Translator.GetSupportedLanguages())
         {
-            <FluentTextField @bind-Value="@Content.First(x => x.Language == lang).Value" Label="@lang.GetName()"></FluentTextField>
+            <FluentTextField @bind-Value="@Content[(int)lang]" Label="@lang.GetName()"></FluentTextField>
         }
     </p>
 </FluentDialogBody>
 
 @code {
     [Parameter]
-    public IGrouping<string, Translation> Content { get; set; } = default!;
+    public Translations.GroupedTranslation Content { get; set; } = default!;
 }

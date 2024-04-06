@@ -39,6 +39,19 @@
         _itemsQueryable = translations.GroupBy(x => x.Key).AsQueryable();
     }
 
+    public class GroupedTranslation(int size)
+    {
+        public string Key { get; set; }
+        
+        private string[] arr = new string[size + 1];
+        
+        public string this[int i]
+        {
+            get { return arr[i]; }
+            set { arr[i] = value; }
+        }
+    }
+
     private async Task OpenDialogAsync(IGrouping<string, Translation> t)
     {
         DialogParameters parameters = new()
@@ -53,12 +66,18 @@
             PreventScroll = true
         };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<TranslationDialog>(t, parameters);
+        var groupedTranslation = new GroupedTranslation(Translator.GetSupportedLanguages().Count) { Key = t.Key };
+        foreach (var translation in t)
+        {
+            groupedTranslation[(int)translation.Language] = translation.Value;
+        }
+        
+        IDialogReference dialog = await DialogService.ShowDialogAsync<TranslationDialog>(groupedTranslation, parameters);
         DialogResult? result = await dialog.Result;
-        if (result.Data is IGrouping<string, Translation> data) {
-            foreach (var translation in data)
+        if (result.Data is GroupedTranslation data) {
+            foreach (var lang in Translator.GetSupportedLanguages())
             {
-                Console.WriteLine($@"{translation.Key}{translation.Language}{translation.Value}");
+                Console.WriteLine($@"{data.Key}{lang}{data[(int)lang]}");
             }
         }
     }
