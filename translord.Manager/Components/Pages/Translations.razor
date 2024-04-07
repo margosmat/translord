@@ -42,14 +42,8 @@
     public class GroupedTranslation(int size)
     {
         public string Key { get; set; }
-        
-        private string[] arr = new string[size + 1];
-        
-        public string this[int i]
-        {
-            get { return arr[i]; }
-            set { arr[i] = value; }
-        }
+
+        public List<Translation> Translations { get; set; }
     }
 
     private async Task OpenDialogAsync(IGrouping<string, Translation> t)
@@ -67,17 +61,14 @@
         };
 
         var groupedTranslation = new GroupedTranslation(Translator.GetSupportedLanguages().Count) { Key = t.Key };
-        foreach (var translation in t)
-        {
-            groupedTranslation[(int)translation.Language] = translation.Value;
-        }
+        groupedTranslation.Translations = t.Select(x => x.Copy()).ToList();
         
         IDialogReference dialog = await DialogService.ShowDialogAsync<TranslationDialog>(groupedTranslation, parameters);
         DialogResult? result = await dialog.Result;
-        if (result.Data is GroupedTranslation data) {
+        if (result is { Data: GroupedTranslation data, Cancelled: false }) {
             foreach (var lang in Translator.GetSupportedLanguages())
             {
-                Console.WriteLine($@"{data.Key}{lang}{data[(int)lang]}");
+                Console.WriteLine($@"{data.Key}{lang}{data.Translations.Find(x => x.Language == lang).Value}");
             }
         }
     }

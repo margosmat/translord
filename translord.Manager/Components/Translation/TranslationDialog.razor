@@ -10,7 +10,7 @@
         Translations:
         @foreach (var lang in Translator.GetSupportedLanguages())
         {
-            <FluentTextField @bind-Value="@Content[(int)lang]" Label="@lang.GetName()"></FluentTextField>
+            <FluentTextField @bind-Value="@Content.Translations.Find(x => x.Language == lang).Value" Label="@lang.GetName()"></FluentTextField>
         }
     </p>
 </FluentDialogBody>
