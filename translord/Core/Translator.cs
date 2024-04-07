@@ -98,4 +98,9 @@ internal sealed class Translator(TranslatorConfiguration config, ITranslationsSt
     {
         return Config.SupportedLanguages.ToList();
     }
+
+    public async Task SaveTranslation(string key, Language language, string value)
+    {
+        await TranslationsStore.SaveTranslation(key, language, value);
+    }
 }

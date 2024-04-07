@@ -8,6 +8,7 @@ public record FileStoreOptions(string TranslationsPath);
 public sealed class FileStore(FileStoreOptions options) : ITranslationsStore
 {
     TranslatorConfiguration? ITranslationsStore.Config { get; set; }
+
     private string TranslationsPath { get; } = options.TranslationsPath;
     private IDictionary<Language, string> TranslationsCache { get; } = new Dictionary<Language, string>();
 
@@ -45,5 +46,10 @@ public sealed class FileStore(FileStoreOptions options) : ITranslationsStore
         }
 
         return Task.FromResult(keys.Distinct().ToList());
+    }
+    
+    public Task SaveTranslation(string key, Language language, string value)
+    {
+        throw new NotImplementedException();
     }
 }
