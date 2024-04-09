@@ -1,9 +1,13 @@
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using translord.Enums;
 
 namespace translord.Core;
 
-public record FileStoreOptions(string TranslationsPath);
+public record FileStoreOptions
+{
+    public string TranslationsPath { get; set; }
+}
 
 public sealed class FileStore(FileStoreOptions options) : ITranslationsStore
 {
@@ -19,37 +23,51 @@ public sealed class FileStore(FileStoreOptions options) : ITranslationsStore
             return json;
         }
         var filePath = $@"{TranslationsPath}/translations.{language.GetISOCode()}.json";
+        if (!File.Exists(filePath)) return string.Empty;
         var serializedJson = await File.ReadAllTextAsync(filePath);
         TranslationsCache[language] = serializedJson;
         return serializedJson;
     }
 
-    public Task<List<string>> GetAllKeys()
+    public async Task<List<string>> GetAllKeys()
     {
         var keys = new List<string>();
         var configSupportedLanguages = ((ITranslationsStore)this).Config?.SupportedLanguages;
-        if (configSupportedLanguages != null)
+        if (configSupportedLanguages == null) return keys;
+        foreach (var lang in configSupportedLanguages)
         {
-            foreach (var lang in configSupportedLanguages)
-            {
-                var filePath = $@"{TranslationsPath}/translations.{lang.GetISOCode()}.json";
-                if (!File.Exists(filePath)) continue;
-                using var fs = new FileStream(filePath, FileMode.Open);
-                using var document = JsonDocument.Parse(fs);
+            var filePath = $@"{TranslationsPath}/translations.{lang.GetISOCode()}.json";
+            if (!File.Exists(filePath)) continue;
+            await using var fs = new FileStream(filePath, FileMode.Open);
+            using var document = await JsonDocument.ParseAsync(fs);
 
-                var names = document.RootElement
-                    .EnumerateArray()
-                    .SelectMany(o => o.EnumerateObject())
-                    .Select(p => p.Name);
-                keys.AddRange(names);
-            }
+            var names = document.RootElement
+                .EnumerateObject()
+                .Select(p => p.Name);
+            keys.AddRange(names);
         }
 
-        return Task.FromResult(keys.Distinct().ToList());
+        return keys.Distinct().ToList();
     }
     
-    public Task SaveTranslation(string key, Language language, string value)
+    public async Task SaveTranslation(string key, Language language, string value)
     {
-        throw new NotImplementedException();
+        var filePath = $@"{TranslationsPath}/translations.{language.GetISOCode()}.json";
+        var options = new JsonSerializerOptions { WriteIndented = true };
+        if (!File.Exists(filePath))
+        {
+            var translationObject = new JsonObject
+            {
+                [key] = value
+            };
+            await File.WriteAllTextAsync(filePath, translationObject.ToJsonString(options));
+        }
+        else
+        {
+            var jsonString = await File.ReadAllTextAsync(filePath);
+            var jsonObject = JsonNode.Parse(jsonString);
+            jsonObject![key] = value;
+            await File.WriteAllTextAsync(filePath, jsonObject.ToJsonString(options));
+        }
     }
 }

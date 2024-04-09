@@ -12,12 +12,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddTranslordPostgresStore(options =>
-    options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty);
-builder.Services.AddTranslordCustomStore<CustomTranslationsStore>();
+builder.Services.AddTranslordFileStore(options =>
+{
+    options.TranslationsPath = Path.Combine(Directory.GetCurrentDirectory(), "translations");
+});
+// builder.Services.AddTranslordPostgresStore(options =>
+//     options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty);
+// builder.Services.AddTranslordCustomStore<CustomTranslationsStore>();
 builder.Services.AddTranslord(o =>
 {
-    List<Language> supportedLanguages = new() {Language.English, Language.Polish, Language.German};
+    List<Language> supportedLanguages = new() { Language.English, Language.Polish, Language.German };
     o.SupportedLanguages = supportedLanguages;
     o.IsCachingEnabled = true;
 });
@@ -36,12 +40,12 @@ app.UseHttpsRedirection();
 
 app.MapGet("/translations/{language}/{key?}", async (Language language, string? key) =>
     {
-        List<Language> supportedLanguages = new() {Language.English, Language.Polish};
+        List<Language> supportedLanguages = new() { Language.English, Language.Polish };
         var path = Path.Combine(Directory.GetCurrentDirectory(), "translations");
         var translator =
             new TranslatorConfiguration(
                 new TranslatorConfigurationOptions { SupportedLanguages = supportedLanguages, IsCachingEnabled = true },
-                new FileStore(new FileStoreOptions(path))).CreateTranslator();
+                new FileStore(new FileStoreOptions { TranslationsPath = path })).CreateTranslator();
 
         if (key is null) return await translator.GetAllTranslationsRawJson(language);
 

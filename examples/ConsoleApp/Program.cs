@@ -5,12 +5,12 @@ using translord;
 using translord.Core;
 using translord.Enums;
 
-List<Language> supportedLanguages = new() {Language.English, Language.Polish};
+List<Language> supportedLanguages = new() { Language.English, Language.Polish };
 var path = Path.Combine(Directory.GetCurrentDirectory(), "translations");
 var translator =
     new TranslatorConfiguration(
         new TranslatorConfigurationOptions { SupportedLanguages = supportedLanguages, IsCachingEnabled = true },
-        new FileStore(new FileStoreOptions(path))).CreateTranslator();
+        new FileStore(new FileStoreOptions { TranslationsPath = path })).CreateTranslator();
 
 var label = await translator.GetTranslation("label.test", Language.Polish);
 Console.WriteLine(label);

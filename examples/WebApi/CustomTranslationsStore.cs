@@ -34,4 +34,8 @@ public class CustomTranslationsStore : ITranslationsStore
     }
 
     TranslatorConfiguration? ITranslationsStore.Config { get; set; }
+    public Task SaveTranslation(string key, Language language, string value)
+    {
+        throw new NotImplementedException();
+    }
 }
