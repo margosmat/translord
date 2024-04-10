@@ -18,14 +18,17 @@ public sealed class FileStore(FileStoreOptions options) : ITranslationsStore
 
     public async Task<string> GetSerializedTranslations(Language language)
     {
-        if (((ITranslationsStore)this).Config is { IsCachingEnabled: true } && TranslationsCache.TryGetValue(language, out var json))
+        if (((ITranslationsStore)this).Config is { IsCachingEnabled: true, IsCacheDirty: false } &&
+            TranslationsCache.TryGetValue(language, out var json))
         {
             return json;
         }
+
         var filePath = $@"{TranslationsPath}/translations.{language.GetISOCode()}.json";
         if (!File.Exists(filePath)) return string.Empty;
         var serializedJson = await File.ReadAllTextAsync(filePath);
         TranslationsCache[language] = serializedJson;
+        ((ITranslationsStore)this).Config?.MarkCacheClean();
         return serializedJson;
     }
 
@@ -49,7 +52,7 @@ public sealed class FileStore(FileStoreOptions options) : ITranslationsStore
 
         return keys.Distinct().ToList();
     }
-    
+
     public async Task SaveTranslation(string key, Language language, string value)
     {
         var filePath = $@"{TranslationsPath}/translations.{language.GetISOCode()}.json";
@@ -69,5 +72,6 @@ public sealed class FileStore(FileStoreOptions options) : ITranslationsStore
             jsonObject![key] = value;
             await File.WriteAllTextAsync(filePath, jsonObject.ToJsonString(options));
         }
+        ((ITranslationsStore)this).Config?.MarkCacheDirty();
     }
 }

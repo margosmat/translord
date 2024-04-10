@@ -5,6 +5,7 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using translord.Manager.Components.Translation
+@using translord.Manager.Models
 @inject ITranslator Translator
 @inject IDialogService DialogService
 
@@ -16,34 +17,32 @@
     <h3>Translations</h3>
 
     <QuickGrid Items="@_itemsQueryable">
-      <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(x => x.Key)" Sortable="true" />
-      @foreach (var lang in Translator.GetSupportedLanguages())
-      {
-          <Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn Title="@(lang.GetName())" Context="langContext">
-              @(langContext.First(y => y.Language == lang).Value)
-          </Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn>
-      }
-      <Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn Title="Actions" Context="actionsContext">
-        <FluentButton @onclick="@(() => OpenDialogAsync(actionsContext))">Edit</FluentButton>
-      </Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn>
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(x => x.Key)" Sortable="true"/>
+        @foreach (var lang in Translator.GetSupportedLanguages())
+        {
+            <Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn Title="@(lang.GetName())" Context="langContext">
+                @(langContext.First(y => y.Language == lang).Value)
+            </Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn>
+        }
+        <Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn Title="Actions" Context="actionsContext">
+            <FluentButton @onclick="@(() => OpenDialogAsync(actionsContext))">Edit</FluentButton>
+        </Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn>
     </QuickGrid>
 </AuthorizeView>
 
 @code {
     IQueryable<IGrouping<string, Translation>>? _itemsQueryable;
-    
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        await RefreshData();
+    }
+    
+    private async Task RefreshData()
+    {
         var translations = await Translator.GetAllTranslations();
         _itemsQueryable = translations.GroupBy(x => x.Key).AsQueryable();
-    }
-
-    public class GroupedTranslation(int size)
-    {
-        public string Key { get; set; }
-
-        public List<Translation> Translations { get; set; }
     }
 
     private async Task OpenDialogAsync(IGrouping<string, Translation> t)
@@ -60,16 +59,22 @@
             PreventScroll = true
         };
 
-        var groupedTranslation = new GroupedTranslation(Translator.GetSupportedLanguages().Count) { Key = t.Key };
-        groupedTranslation.Translations = t.Select(x => x.Copy()).ToList();
-        
+        var groupedTranslation = new GroupedTranslations(Translator.GetSupportedLanguages().Count)
+        {
+            Key = t.Key,
+            Translations = t.Select(x => x.Copy()).ToList()
+        };
+
         IDialogReference dialog = await DialogService.ShowDialogAsync<TranslationDialog>(groupedTranslation, parameters);
         DialogResult? result = await dialog.Result;
-        if (result is { Data: GroupedTranslation data, Cancelled: false }) {
-            foreach (var lang in Translator.GetSupportedLanguages())
+        if (result is { Data: GroupedTranslations data, Cancelled: false })
+        {
+            var updatedTranslations = Translator.GetSupportedLanguages().Where(lang => t.First(x => x.Language == lang).Value != data.Translations.First(x => x.Language == lang).Value).ToList();
+            foreach (var lang in updatedTranslations)
             {
-                Console.WriteLine($@"{data.Key}{lang}{data.Translations.Find(x => x.Language == lang).Value}");
+                await Translator.SaveTranslation(data.Key, lang, data.Translations.First(x => x.Language == lang).Value);
             }
+            if (updatedTranslations.Count > 0) await RefreshData();
         }
     }
 
