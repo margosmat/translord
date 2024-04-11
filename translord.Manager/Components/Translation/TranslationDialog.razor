@@ -5,7 +5,14 @@
 
 <FluentDialogBody>
     <p>
-        @Content.Key
+        @if (IsAddingNewLabel)
+        {
+            <FluentTextField @bind-Value="@Content.Key" Label="Key"></FluentTextField>
+        }
+        else
+        {
+            @Content.Key   
+        }
         Translations:
         @foreach (var lang in Translator.GetSupportedLanguages())
         {
@@ -17,4 +24,12 @@
 @code {
     [Parameter]
     public GroupedTranslations Content { get; set; } = default!;
+
+    public bool IsAddingNewLabel { get; private set; }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        IsAddingNewLabel = string.IsNullOrEmpty(Content.Key);
+    }
 }

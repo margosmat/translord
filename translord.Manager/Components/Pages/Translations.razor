@@ -16,6 +16,7 @@
 <AuthorizeView>
     <h3>Translations</h3>
 
+    <FluentButton IconStart="@(new Icons.Filled.Size20.AddSquare())" @onclick="@(() => OpenDialogAsync())">Add new</FluentButton>
     <QuickGrid Items="@_itemsQueryable">
         <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(x => x.Key)" Sortable="true"/>
         @foreach (var lang in Translator.GetSupportedLanguages())
@@ -45,11 +46,11 @@
         _itemsQueryable = translations.GroupBy(x => x.Key).AsQueryable();
     }
 
-    private async Task OpenDialogAsync(IGrouping<string, Translation> t)
+    private async Task OpenDialogAsync(IGrouping<string, Translation>? t = null)
     {
         DialogParameters parameters = new()
         {
-            Title = t.Key,
+            Title = t?.Key ?? "New Translation",
             PrimaryAction = "Save",
             PrimaryActionEnabled = true,
             SecondaryAction = "Cancel",
@@ -61,15 +62,22 @@
 
         var groupedTranslation = new GroupedTranslations(Translator.GetSupportedLanguages().Count)
         {
-            Key = t.Key,
-            Translations = t.Select(x => x.Copy()).ToList()
+            Key = t?.Key ?? "",
+            Translations = t?.Select(x => x.Copy()).ToList() ?? Translator.GetSupportedLanguages().Select(x => new Translation
+            {
+                Key = "",
+                Language = x,
+                Value = ""
+            }).ToList()
         };
 
         IDialogReference dialog = await DialogService.ShowDialogAsync<TranslationDialog>(groupedTranslation, parameters);
-        DialogResult? result = await dialog.Result;
+        DialogResult result = await dialog.Result;
         if (result is { Data: GroupedTranslations data, Cancelled: false })
         {
-            var updatedTranslations = Translator.GetSupportedLanguages().Where(lang => t.First(x => x.Language == lang).Value != data.Translations.First(x => x.Language == lang).Value).ToList();
+            var updatedTranslations = t is null
+                ? Translator.GetSupportedLanguages()
+                : Translator.GetSupportedLanguages().Where(lang => t.First(x => x.Language == lang).Value != data.Translations.First(x => x.Language == lang).Value).ToList();
             foreach (var lang in updatedTranslations)
             {
                 await Translator.SaveTranslation(data.Key, lang, data.Translations.First(x => x.Language == lang).Value);
