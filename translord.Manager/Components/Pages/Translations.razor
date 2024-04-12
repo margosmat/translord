@@ -16,19 +16,26 @@
 <AuthorizeView>
     <h3>Translations</h3>
 
-    <FluentButton IconStart="@(new Icons.Filled.Size20.AddSquare())" @onclick="@(() => OpenDialogAsync())">Add new</FluentButton>
-    <QuickGrid Items="@_itemsQueryable">
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(x => x.Key)" Sortable="true"/>
-        @foreach (var lang in Translator.GetSupportedLanguages())
-        {
-            <Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn Title="@(lang.GetName())" Context="langContext">
-                @(langContext.First(y => y.Language == lang).Value)
+    @if (_itemsQueryable != null && _itemsQueryable.Any())
+    {
+        <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size16.Add())" @onclick="@(() => OpenDialogAsync())">Add new</FluentButton>
+        <QuickGrid Items="@_itemsQueryable">
+            <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(x => x.Key)" Sortable="true"/>
+            @foreach (var lang in Translator.GetSupportedLanguages())
+            {
+                <Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn Title="@(lang.GetName())" Context="langContext">
+                    @(langContext.First(y => y.Language == lang).Value)
+                </Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn>
+            }
+            <Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn Title="Actions" Context="actionsContext">
+                <FluentButton @onclick="@(() => OpenDialogAsync(actionsContext))">Edit</FluentButton>
             </Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn>
-        }
-        <Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn Title="Actions" Context="actionsContext">
-            <FluentButton @onclick="@(() => OpenDialogAsync(actionsContext))">Edit</FluentButton>
-        </Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn>
-    </QuickGrid>
+        </QuickGrid>
+    }
+    else
+    {
+        <FluentProgressRing Width="64px"></FluentProgressRing>
+    }
 </AuthorizeView>
 
 @code {

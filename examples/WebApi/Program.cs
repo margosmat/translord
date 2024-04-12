@@ -12,16 +12,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddTranslordFileStore(options =>
-{
-    options.TranslationsPath = Path.Combine(Directory.GetCurrentDirectory(), "translations");
-});
-// builder.Services.AddTranslordPostgresStore(options =>
-//     options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty);
+// builder.Services.AddTranslordFileStore(options =>
+// {
+//     options.TranslationsPath = Path.Combine(Directory.GetCurrentDirectory(), "translations");
+// });
+builder.Services.AddTranslordPostgresStore(options =>
+    options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty);
 // builder.Services.AddTranslordCustomStore<CustomTranslationsStore>();
 builder.Services.AddTranslord(o =>
 {
-    List<Language> supportedLanguages = new() { Language.English, Language.Polish, Language.German };
+    List<Language> supportedLanguages = [Language.English, Language.Polish, Language.German];
     o.SupportedLanguages = supportedLanguages;
     o.IsCachingEnabled = true;
 });

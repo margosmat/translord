@@ -19,15 +19,15 @@ public class EfStore : ITranslationsStore
     
     public async Task<string> GetSerializedTranslations(Language language)
     {
-        var translations = _context.Translations.Where(x => x.Language == language);
-        var json = JsonSerializer.Serialize(await translations.ToDictionaryAsync(x => x.Key, x => x.Value));
+        var translations = await _context.Translations.Where(x => x.Language == language).ToDictionaryAsync(x => x.Key, x => x.Value);
+        var json = JsonSerializer.Serialize(translations);
         return json;
     }
     
     public async Task<List<string>> GetAllKeys()
     {
-        var allKeys = _context.Translations.Select(x => x.Key).Distinct();
-        return await allKeys.ToListAsync();
+        var allKeys = await _context.Translations.Select(x => x.Key).Distinct().ToListAsync();
+        return allKeys;
     }
     
     public async Task SaveTranslation(string key, Language language, string value)

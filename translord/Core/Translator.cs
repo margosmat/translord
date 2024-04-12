@@ -41,10 +41,13 @@ internal sealed class Translator(TranslatorConfiguration config, ITranslationsSt
             }
             else
             {
-                var allLanguagesTranslationsTasks =
-                    Config.SupportedLanguages.Select(async x => await GetSingleLanguageTranslations(allKeys, x));
-                var allLanguagesTranslations = await Task.WhenAll(allLanguagesTranslationsTasks);
-                translations = allLanguagesTranslations.SelectMany(x => x).ToList();
+                var allLanguagesTranslations = new List<Translation>();
+                foreach (var supportedLanguage in Config.SupportedLanguages)
+                {
+                    var langTranslations = await GetSingleLanguageTranslations(allKeys, supportedLanguage);
+                    allLanguagesTranslations.AddRange(langTranslations);
+                }
+                translations = allLanguagesTranslations.ToList();
             }
         }
         catch (Exception e)
@@ -80,11 +83,11 @@ internal sealed class Translator(TranslatorConfiguration config, ITranslationsSt
         }).ToList();
     }
 
-    public Task<string> GetAllTranslationsRawJson(Language language)
+    public async Task<string> GetAllTranslationsRawJson(Language language)
     {
         try
         {
-            return TranslationsStore.GetSerializedTranslations(language);
+            return await TranslationsStore.GetSerializedTranslations(language);
         }
         catch (Exception e)
         {
