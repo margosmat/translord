@@ -28,7 +28,8 @@
                 </Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn>
             }
             <Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn Title="Actions" Context="actionsContext">
-                <FluentButton @onclick="@(() => OpenDialogAsync(actionsContext))">Edit</FluentButton>
+                <FluentButton IconStart="@(new Icons.Regular.Size28.Pen())" @onclick="@(() => OpenDialogAsync(actionsContext))"></FluentButton>
+                <FluentButton IconStart="@(new Icons.Regular.Size28.Delete().WithColor(Color.Warning))" @onclick="@(async () => await RemoveTranslation(actionsContext.Key))"></FluentButton>
             </Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn>
         </QuickGrid>
     }
@@ -51,6 +52,12 @@
     {
         var translations = await Translator.GetAllTranslations();
         _itemsQueryable = translations.GroupBy(x => x.Key).AsQueryable();
+    }
+
+    private async Task RemoveTranslation(string key)
+    {
+        await Translator.RemoveTranslation(key);
+        await RefreshData();
     }
 
     private async Task OpenDialogAsync(IGrouping<string, Translation>? t = null)

@@ -45,4 +45,14 @@ public class EfStore : ITranslationsStore
 
         await _context.SaveChangesAsync();
     }
+
+    public async Task RemoveTranslation(string key)
+    {
+        var translationsToRemove = await _context.Translations.Where(x => x.Key == key).ToListAsync();
+        if (translationsToRemove.Any())
+        {
+            _context.Translations.RemoveRange(translationsToRemove);
+            await _context.SaveChangesAsync();
+        }
+    }
 }

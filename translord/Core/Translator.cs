@@ -105,4 +105,9 @@ internal sealed class Translator(TranslatorConfiguration config, ITranslationsSt
     {
         await TranslationsStore.SaveTranslation(key, language, value);
     }
+
+    public async Task RemoveTranslation(string key)
+    {
+        await TranslationsStore.RemoveTranslation(key);
+    }
 }

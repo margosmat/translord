@@ -74,4 +74,9 @@ public sealed class FileStore(FileStoreOptions options) : ITranslationsStore
         }
         ((ITranslationsStore)this).Config?.MarkCacheDirty();
     }
+
+    public Task RemoveTranslation(string key)
+    {
+        throw new NotImplementedException();
+    }
 }

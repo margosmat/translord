@@ -8,4 +8,5 @@ public interface ITranslationsStore
     Task<List<string>> GetAllKeys();
     TranslatorConfiguration? Config { get; set; }
     Task SaveTranslation(string key, Language language, string value);
+    Task RemoveTranslation(string key);
 }

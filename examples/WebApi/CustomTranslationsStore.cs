@@ -38,4 +38,9 @@ public class CustomTranslationsStore : ITranslationsStore
     {
         throw new NotImplementedException();
     }
+
+    public Task RemoveTranslation(string key)
+    {
+        throw new NotImplementedException();
+    }
 }

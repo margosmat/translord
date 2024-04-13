@@ -10,4 +10,5 @@ public interface ITranslator
     Task<string> GetAllTranslationsRawJson(Language language);
     List<Language> GetSupportedLanguages();
     Task SaveTranslation(string key, Language language, string value);
+    Task RemoveTranslation(string key);
 }
