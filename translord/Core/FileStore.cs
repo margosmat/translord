@@ -75,8 +75,20 @@ public sealed class FileStore(FileStoreOptions options) : ITranslationsStore
         ((ITranslationsStore)this).Config?.MarkCacheDirty();
     }
 
-    public Task RemoveTranslation(string key)
+    public async Task RemoveTranslation(string key)
     {
-        throw new NotImplementedException();
+        var configSupportedLanguages = ((ITranslationsStore)this).Config?.SupportedLanguages;
+        if (configSupportedLanguages == null) return;
+        foreach (var lang in configSupportedLanguages)
+        {
+            var filePath = $@"{TranslationsPath}/translations.{lang.GetISOCode()}.json";
+            if (!File.Exists(filePath)) continue;
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            var jsonString = await File.ReadAllTextAsync(filePath);
+            var jsonObject = JsonNode.Parse(jsonString);
+            if (jsonObject is null) continue;
+            (jsonObject as JsonObject)?.Remove(key);
+            await File.WriteAllTextAsync(filePath, jsonObject.ToJsonString(options));
+        }
     }
 }
