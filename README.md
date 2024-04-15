@@ -1,5 +1,15 @@
 # translord
 
+---
+
+<div align="center">
+
+  ![translord](assets/logo.jpeg)
+
+</div>
+
+---
+
 #### translord - simple TMS to get your translations up and running in no time.
 
 🚧 Project under development 
@@ -11,16 +21,63 @@ What this tool aims to achieve? To be a central place in your project that handl
 - management
 - revision
 
+## Configuration examples
+
+### WebApp with FileStore
+```c#
+builder.Services.AddTranslordFileStore(options =>
+{
+    options.TranslationsPath = Path.Combine(Directory.GetCurrentDirectory(), "translations");
+});
+builder.Services.AddTranslord(o =>
+{
+    List<Language> supportedLanguages = [Language.English, Language.Polish, Language.German];
+    o.SupportedLanguages = supportedLanguages;
+    o.IsCachingEnabled = true;
+});
+```
+
+### WebApp with PostgresStore and TMS panel
+```c#
+builder.Services.AddTranslordPostgresStore(options =>
+    options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty);
+builder.Services.AddTranslord(o =>
+{
+    List<Language> supportedLanguages = [Language.English, Language.Polish, Language.German];
+    o.SupportedLanguages = supportedLanguages;
+    o.IsCachingEnabled = true;
+});
+builder.AddTranslordManager();
+```
+
+### Console app with FileStore
+```c#
+List<Language> supportedLanguages = [ Language.English, Language.Polish ];
+var path = Path.Combine(Directory.GetCurrentDirectory(), "translations");
+var translator =
+    new TranslatorConfiguration(
+        new TranslatorConfigurationOptions { SupportedLanguages = supportedLanguages, IsCachingEnabled = true },
+        new FileStore(new FileStoreOptions { TranslationsPath = path })).CreateTranslator();
+
+var label = await translator.GetTranslation("label.test", Language.Polish);
+var translations = await translator.GetAllTranslations(Language.English);
+```
+
+## TMS panel
+
+![TMS panel screenshot](assets/panel_screenshot.png)
+
 ## Features
 
 ### Must have
 
-- [ ] modularity
-- [ ] easy configuration
-- [ ] storing (using EF Core)
+- [ ] modularity (in progress)
+- [ ] easy configuration (in progress)
+- [ ] storing (using EF Core) (in progress)
 - [ ] translations (Google Translate API?)
-- [ ] delivery
-- [ ] CMS-like panel
+- [ ] CMS-like panel (in progress)
+- [ ] import of existing translations
+- [ ] examples (in progress)
 
 ### Nice to have
 
@@ -28,11 +85,10 @@ What this tool aims to achieve? To be a central place in your project that handl
 - [ ] caching
 - [ ] role-based access to the CMS panel
 - [ ] translations revision
-- [ ] examples
 
 ## Inspiration
 
-- IdentityServer (as for setup and config/ease of use)
+- IdentityServer (as for config and ease of use)
 - Serilog (as for modularity, structure)
 
 ## Support

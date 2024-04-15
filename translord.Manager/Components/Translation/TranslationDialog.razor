@@ -4,21 +4,23 @@
 @implements IDialogContentComponent<GroupedTranslations>
 
 <FluentDialogBody>
-    <p>
+    <div>
         @if (IsAddingNewLabel)
         {
             <FluentTextField @bind-Value="@Content.Key" Label="Key"></FluentTextField>
         }
         else
         {
-            @Content.Key   
+            <span>@Content.Key</span>
         }
-        Translations:
+        <br/>
+        <b>Translations:</b>
+        <br/>
         @foreach (var lang in Translator.GetSupportedLanguages())
         {
             <FluentTextField @bind-Value="@Content.Translations.Find(x => x.Language == lang)!.Value" Label="@lang.GetName()"></FluentTextField>
         }
-    </p>
+    </div>
 </FluentDialogBody>
 
 @code {

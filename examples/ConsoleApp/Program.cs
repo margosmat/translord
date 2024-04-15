@@ -5,7 +5,7 @@ using translord;
 using translord.Core;
 using translord.Enums;
 
-List<Language> supportedLanguages = new() { Language.English, Language.Polish };
+List<Language> supportedLanguages = [Language.English, Language.Polish];
 var path = Path.Combine(Directory.GetCurrentDirectory(), "translations");
 var translator =
     new TranslatorConfiguration(

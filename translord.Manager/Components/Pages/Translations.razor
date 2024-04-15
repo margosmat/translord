@@ -64,7 +64,7 @@
     {
         DialogParameters parameters = new()
         {
-            Title = t?.Key ?? "New Translation",
+            Title = t?.Key is not null ? "Edit" : "New Translation",
             PrimaryAction = "Save",
             PrimaryActionEnabled = true,
             SecondaryAction = "Cancel",
