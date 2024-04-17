@@ -90,7 +90,7 @@
         if (result is { Data: GroupedTranslations data, Cancelled: false })
         {
             var updatedTranslations = t is null
-                ? Translator.GetSupportedLanguages()
+                ? Translator.GetSupportedLanguages().Where(lang => !string.IsNullOrEmpty(data.Translations.First(x => x.Language == lang).Value)).ToList()
                 : Translator.GetSupportedLanguages().Where(lang => t.First(x => x.Language == lang).Value != data.Translations.First(x => x.Language == lang).Value).ToList();
             foreach (var lang in updatedTranslations)
             {

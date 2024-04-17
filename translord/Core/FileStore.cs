@@ -73,7 +73,7 @@ public sealed class FileStore(FileStoreOptions options) : ITranslationsStore
             await File.WriteAllTextAsync(filePath, jsonObject.ToJsonString(options));
         }
         ((ITranslationsStore)this).Config?.MarkCacheDirty();
-        TranslationsCache.Clear();
+        TranslationsCache.Remove(language);
     }
 
     public async Task RemoveTranslation(string key)
