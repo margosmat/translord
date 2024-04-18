@@ -23,11 +23,17 @@ public static class TranslordServiceCollectionExtensions
         return services;
     }
     
+    public static IServiceCollection AddTranslordCustomCache<T>(this IServiceCollection services) where T : class, ITranslationsCache
+    {
+        services.AddTransient<ITranslationsCache, T>();
+        return services;
+    }
+    
     public static IServiceCollection AddTranslordFileStore(this IServiceCollection services, Action<FileStoreOptions> setupOptions)
     {
         var options = new FileStoreOptions();
         setupOptions(options);
-        services.AddTransient<ITranslationsStore>(_ => new FileStore(options));
+        services.AddTransient<ITranslationsStore>(x => new FileStore(options, x.GetService<ITranslationsCache>()));
         return services;
     }
 }

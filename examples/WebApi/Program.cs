@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using translord;
 using translord.Core;
 using translord.EntityFramework;
@@ -12,6 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSingleton(new ConcurrentDictionary<string, string>());
+builder.Services.AddTranslordCustomCache<CustomTranslationsCache>();
 builder.Services.AddTranslordFileStore(options =>
 {
     options.TranslationsPath = Path.Combine(Directory.GetCurrentDirectory(), "translations");
@@ -23,7 +26,6 @@ builder.Services.AddTranslord(o =>
 {
     List<Language> supportedLanguages = [Language.English, Language.Polish, Language.German];
     o.SupportedLanguages = supportedLanguages;
-    o.IsCachingEnabled = true;
 });
 builder.AddTranslordManager();
 
@@ -44,8 +46,8 @@ app.MapGet("/translations/{language}/{key?}", async (Language language, string? 
         var path = Path.Combine(Directory.GetCurrentDirectory(), "translations");
         var translator =
             new TranslatorConfiguration(
-                new TranslatorConfigurationOptions { SupportedLanguages = supportedLanguages, IsCachingEnabled = true },
-                new FileStore(new FileStoreOptions { TranslationsPath = path })).CreateTranslator();
+                new TranslatorConfigurationOptions { SupportedLanguages = supportedLanguages },
+                new FileStore(new FileStoreOptions { TranslationsPath = path }, null)).CreateTranslator();
 
         if (key is null) return await translator.GetAllTranslationsRawJson(language);
 

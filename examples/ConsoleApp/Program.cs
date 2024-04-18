@@ -9,8 +9,8 @@ List<Language> supportedLanguages = [Language.English, Language.Polish];
 var path = Path.Combine(Directory.GetCurrentDirectory(), "translations");
 var translator =
     new TranslatorConfiguration(
-        new TranslatorConfigurationOptions { SupportedLanguages = supportedLanguages, IsCachingEnabled = true },
-        new FileStore(new FileStoreOptions { TranslationsPath = path })).CreateTranslator();
+        new TranslatorConfigurationOptions { SupportedLanguages = supportedLanguages },
+        new FileStore(new FileStoreOptions { TranslationsPath = path }, null)).CreateTranslator();
 
 var label = await translator.GetTranslation("label.test", Language.Polish);
 Console.WriteLine(label);

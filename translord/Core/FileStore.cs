@@ -9,26 +9,24 @@ public record FileStoreOptions
     public string TranslationsPath { get; set; }
 }
 
-public sealed class FileStore(FileStoreOptions options) : ITranslationsStore
+public sealed class FileStore(FileStoreOptions options, ITranslationsCache? cache) : ITranslationsStore
 {
     TranslatorConfiguration? ITranslationsStore.Config { get; set; }
 
     private string TranslationsPath { get; } = options.TranslationsPath;
-    private IDictionary<Language, string> TranslationsCache { get; } = new Dictionary<Language, string>();
 
     public async Task<string> GetSerializedTranslations(Language language)
     {
-        if (((ITranslationsStore)this).Config is { IsCachingEnabled: true, IsCacheDirty: false } &&
-            TranslationsCache.TryGetValue(language, out var json))
+        if (cache is not null)
         {
-            return json;
+            var json = await cache.Get($"{language}");
+            if (!string.IsNullOrEmpty(json)) return json;
         }
 
         var filePath = $@"{TranslationsPath}/translations.{language.GetISOCode()}.json";
         if (!File.Exists(filePath)) return string.Empty;
         var serializedJson = await File.ReadAllTextAsync(filePath);
-        TranslationsCache[language] = serializedJson;
-        ((ITranslationsStore)this).Config?.MarkCacheClean();
+        if (cache is not null) await cache.Add($"{language}", serializedJson);
         return serializedJson;
     }
 
@@ -72,8 +70,7 @@ public sealed class FileStore(FileStoreOptions options) : ITranslationsStore
             jsonObject![key] = value;
             await File.WriteAllTextAsync(filePath, jsonObject.ToJsonString(options));
         }
-        ((ITranslationsStore)this).Config?.MarkCacheDirty();
-        TranslationsCache.Remove(language);
+        if (cache is not null) await cache.Remove($"{language}");
     }
 
     public async Task RemoveTranslation(string key)
@@ -90,6 +87,7 @@ public sealed class FileStore(FileStoreOptions options) : ITranslationsStore
             if (jsonObject is null) continue;
             (jsonObject as JsonObject)?.Remove(key);
             await File.WriteAllTextAsync(filePath, jsonObject.ToJsonString(options));
+            if (cache is not null) await cache.Remove($"{lang}");
         }
     }
 }
