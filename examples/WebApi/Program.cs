@@ -5,6 +5,7 @@ using translord.EntityFramework;
 using translord.EntityFramework.Postgres;
 using translord.Enums;
 using translord.Manager;
+using translord.RedisCache;
 using WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +15,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton(new ConcurrentDictionary<string, string>());
-builder.Services.AddTranslordCustomCache<CustomTranslationsCache>();
+builder.Services.AddTranslordRedisCache(x =>
+{
+    x.Server = "localhost";
+    x.Port = 6379;
+});
 builder.Services.AddTranslordFileStore(options =>
 {
     options.TranslationsPath = Path.Combine(Directory.GetCurrentDirectory(), "translations");
