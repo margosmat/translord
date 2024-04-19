@@ -14,29 +14,33 @@
 @rendermode RenderMode.InteractiveServer
 
 <AuthorizeView>
-    <h3>Translations</h3>
+    <div class="translations-page">
+        <h3>Translations</h3>
 
-    @if (_itemsQueryable != null && _itemsQueryable.Any())
-    {
-        <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size16.Add())" @onclick="@(() => OpenDialogAsync())">Add new</FluentButton>
-        <QuickGrid Items="@_itemsQueryable">
-            <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(x => x.Key)" Sortable="true"/>
-            @foreach (var lang in Translator.GetSupportedLanguages())
-            {
-                <Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn Title="@(lang.GetName())" Context="langContext">
-                    @(langContext.First(y => y.Language == lang).Value)
-                </Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn>
-            }
-            <Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn Title="Actions" Context="actionsContext">
-                <FluentButton IconStart="@(new Icons.Regular.Size28.Pen())" @onclick="@(() => OpenDialogAsync(actionsContext))"></FluentButton>
-                <FluentButton IconStart="@(new Icons.Regular.Size28.Delete().WithColor(Color.Warning))" @onclick="@(async () => await RemoveTranslation(actionsContext.Key))"></FluentButton>
-            </Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn>
-        </QuickGrid>
-    }
-    else
-    {
-        <FluentProgressRing Width="64px"></FluentProgressRing>
-    }
+        @if (_itemsQueryable != null && _itemsQueryable.Any())
+        {
+            <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size16.Add())" @onclick="@(() => OpenDialogAsync())">Add new</FluentButton>
+            <div class="grid">
+                <QuickGrid Items="@_itemsQueryable">
+                    <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(x => x.Key)" Sortable="true"/>
+                    @foreach (var lang in Translator.GetSupportedLanguages())
+                    {
+                        <Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn Title="@(lang.GetName())" Context="langContext">
+                            @(langContext.First(y => y.Language == lang).Value)
+                        </Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn>
+                    }
+                    <Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn Title="Actions" Context="actionsContext">
+                        <FluentButton IconStart="@(new Icons.Regular.Size28.Pen())" @onclick="@(() => OpenDialogAsync(actionsContext))"></FluentButton>
+                        <FluentButton IconStart="@(new Icons.Regular.Size28.Delete().WithColor(Color.Warning))" @onclick="@(async () => await RemoveTranslation(actionsContext.Key))"></FluentButton>
+                    </Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn>
+                </QuickGrid>
+            </div>
+        }
+        else
+        {
+            <FluentProgressRing Width="64px"></FluentProgressRing>
+        }
+    </div>
 </AuthorizeView>
 
 @code {

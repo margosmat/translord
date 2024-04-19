@@ -49,3 +49,43 @@ h1:focus {
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
 }
+
+.translations-page {
+    .grid {
+        height: 25rem;
+        overflow-y: auto;
+    }
+
+    .grid table {
+        min-width: 100%;
+    }
+
+    /* Sticky header while scrolling */
+    thead {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    /* For virtualized grids, it's essential that all rows have the same known height */
+    tr {
+        height: 30px;
+        border-bottom: 0.5px solid black;
+    }
+
+    tbody td {
+        white-space: nowrap;
+        overflow: hidden;
+        max-width: 0;
+        text-overflow: ellipsis;
+        border-right: 0.5px solid black;
+    }
+
+    tbody td:first-of-type {
+        border-left: 0.5px solid black;
+    }
+    
+    tbody td:last-of-type {
+        position: sticky;
+    }
+}

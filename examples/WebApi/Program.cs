@@ -29,7 +29,7 @@ builder.Services.AddTranslordFileStore(options =>
 // builder.Services.AddTranslordCustomStore<CustomTranslationsStore>();
 builder.Services.AddTranslord(o =>
 {
-    List<Language> supportedLanguages = [Language.English, Language.Polish, Language.German];
+    List<Language> supportedLanguages = [Language.English, Language.Polish, Language.German, Language.French, Language.Italian, Language.Spanish, Language.Ukrainian, Language.Czech];
     o.SupportedLanguages = supportedLanguages;
 });
 builder.AddTranslordManager();
