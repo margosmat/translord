@@ -3,7 +3,6 @@
 @using translord.Enums
 @using translord.Models
 @using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Components.QuickGrid
 @using translord.Manager.Components.Translation
 @using translord.Manager.Models
 @inject ITranslator Translator
@@ -21,19 +20,19 @@
         {
             <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size16.Add())" @onclick="@(() => OpenDialogAsync())">Add new</FluentButton>
             <div class="grid">
-                <QuickGrid Items="@_itemsQueryable">
-                    <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(x => x.Key)" Sortable="true"/>
+                <FluentDataGrid Items="@_itemsQueryable">
+                    <PropertyColumn Property="@(x => x.Key)" Sortable="true"/>
                     @foreach (var lang in Translator.GetSupportedLanguages())
                     {
-                        <Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn Title="@(lang.GetName())" Context="langContext">
+                        <TemplateColumn Title="@(lang.GetName())" Context="langContext">
                             @(langContext.First(y => y.Language == lang).Value)
-                        </Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn>
+                        </TemplateColumn>
                     }
-                    <Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn Title="Actions" Context="actionsContext">
+                    <TemplateColumn Title="Actions" Context="actionsContext">
                         <FluentButton IconStart="@(new Icons.Regular.Size28.Pen())" @onclick="@(() => OpenDialogAsync(actionsContext))"></FluentButton>
                         <FluentButton IconStart="@(new Icons.Regular.Size28.Delete().WithColor(Color.Warning))" @onclick="@(async () => await RemoveTranslation(actionsContext.Key))"></FluentButton>
-                    </Microsoft.AspNetCore.Components.QuickGrid.TemplateColumn>
-                </QuickGrid>
+                    </TemplateColumn>
+                </FluentDataGrid>
             </div>
         }
         else
