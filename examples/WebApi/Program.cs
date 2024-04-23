@@ -31,6 +31,7 @@ builder.Services.AddTranslord(o =>
 {
     List<Language> supportedLanguages = [Language.English, Language.Polish, Language.German, Language.French, Language.Italian, Language.Spanish, Language.Ukrainian, Language.Czech];
     o.SupportedLanguages = supportedLanguages;
+    o.DefaultLanguage = Language.English;
 });
 builder.AddTranslordManager();
 

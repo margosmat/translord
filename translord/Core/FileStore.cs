@@ -33,22 +33,39 @@ public sealed class FileStore(FileStoreOptions options, ITranslationsCache? cach
     public async Task<List<string>> GetAllKeys()
     {
         var keys = new List<string>();
-        var configSupportedLanguages = ((ITranslationsStore)this).Config?.SupportedLanguages;
-        if (configSupportedLanguages == null) return keys;
-        foreach (var lang in configSupportedLanguages)
+        if (((ITranslationsStore)this).Config?.DefaultLanguage.HasValue ?? false)
         {
-            var filePath = $@"{TranslationsPath}/translations.{lang.GetISOCode()}.json";
-            if (!File.Exists(filePath)) continue;
-            await using var fs = new FileStream(filePath, FileMode.Open);
-            using var document = await JsonDocument.ParseAsync(fs);
-
-            var names = document.RootElement
-                .EnumerateObject()
-                .Select(p => p.Name);
-            keys.AddRange(names);
+            var defaultLanguageKeys = await GetKeysFromLanguageFile(((ITranslationsStore)this).Config.DefaultLanguage.Value);
+            keys.AddRange(defaultLanguageKeys);
+        }
+        else
+        {
+            var configSupportedLanguages = ((ITranslationsStore)this).Config?.SupportedLanguages;
+            if (configSupportedLanguages == null) return keys;
+            foreach (var lang in configSupportedLanguages)
+            {
+                var names = await GetKeysFromLanguageFile(lang);
+                keys.AddRange(names);
+            }
         }
 
         return keys.Distinct().ToList();
+    }
+
+    private async Task<IEnumerable<string>> GetKeysFromLanguageFile(Language lang)
+    {
+        var filePath = $@"{TranslationsPath}/translations.{lang.GetISOCode()}.json";
+        if (!File.Exists(filePath)) return Enumerable.Empty<string>();
+
+        await using var fs = new FileStream(filePath, FileMode.Open);
+        using var document = await JsonDocument.ParseAsync(fs);
+
+        var names = document.RootElement
+            .EnumerateObject()
+            .Select(p => p.Name)
+            .ToList();
+
+        return names;
     }
 
     public async Task SaveTranslation(string key, Language language, string value)
@@ -70,6 +87,7 @@ public sealed class FileStore(FileStoreOptions options, ITranslationsCache? cach
             jsonObject![key] = value;
             await File.WriteAllTextAsync(filePath, jsonObject.ToJsonString(options));
         }
+
         if (cache is not null) await cache.Remove($"{language}");
     }
 
