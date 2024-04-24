@@ -101,6 +101,11 @@ internal sealed class Translator(TranslatorConfiguration config, ITranslationsSt
         return Config.SupportedLanguages.ToList();
     }
 
+    public Language? GetDefaultLanguage()
+    {
+        return Config.DefaultLanguage;
+    }
+
     public async Task SaveTranslation(string key, Language language, string value)
     {
         await TranslationsStore.SaveTranslation(key, language, value);
@@ -109,5 +114,10 @@ internal sealed class Translator(TranslatorConfiguration config, ITranslationsSt
     public async Task RemoveTranslation(string key)
     {
         await TranslationsStore.RemoveTranslation(key);
+    }
+
+    public async Task<List<(Language lang, int count)>> GetTranslationsCount()
+    {
+        return await TranslationsStore.GetTranslationsCount();
     }
 }

@@ -43,4 +43,9 @@ public class CustomTranslationsStore : ITranslationsStore
     {
         throw new NotImplementedException();
     }
+
+    public Task<List<(Language lang, int count)>> GetTranslationsCount()
+    {
+        throw new NotImplementedException();
+    }
 }

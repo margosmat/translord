@@ -55,4 +55,18 @@ public class EfStore : ITranslationsStore
             await _context.SaveChangesAsync();
         }
     }
+
+    public async Task<List<(Language lang, int count)>> GetTranslationsCount()
+    {
+        var translationsCount = new List<(Language lang, int count)>();
+        var configSupportedLanguages = ((ITranslationsStore)this).Config?.SupportedLanguages;
+        if (configSupportedLanguages == null) return translationsCount;
+        foreach (var lang in configSupportedLanguages)
+        {
+            var count = await _context.Translations.CountAsync(x => x.Language == lang);
+            translationsCount.Add((lang, count));
+        }
+
+        return translationsCount;
+    }
 }

@@ -1,7 +1,40 @@
 ﻿@page "/"
+@using translord.Enums
+@inject ITranslator Translator
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>translord</h1>
 
-Welcome to your new app.
+<AuthorizeView>
+    <Authorized>
+        <p>Translations statistics:</p>
+        @if (baseNumber == 0)
+        {
+            <p>Start adding translations to see statistics.</p>
+        }
+        else
+        {
+            @foreach(var (lang, count) in translationsCount)
+            {
+                <p>@lang.GetName() - @count (@(count * 100 / baseNumber)%)</p>
+            }
+        }
+    </Authorized>
+    <NotAuthorized>
+        <p>Log in to see your translations statistics.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    List<(Language lang, int count)> translationsCount = new();
+    int baseNumber;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var defaultLanguage = Translator.GetDefaultLanguage();
+        translationsCount = await Translator.GetTranslationsCount();
+        baseNumber = defaultLanguage.HasValue ? translationsCount.Find(x => x.lang == defaultLanguage).count : translationsCount.MaxBy(x => x.count).count;
+    }
+}

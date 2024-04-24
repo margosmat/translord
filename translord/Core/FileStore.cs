@@ -108,4 +108,25 @@ public sealed class FileStore(FileStoreOptions options, ITranslationsCache? cach
             if (cache is not null) await cache.Remove($"{lang}");
         }
     }
+
+    public async Task<List<(Language lang, int count)>> GetTranslationsCount()
+    {
+        var translationsCount = new List<(Language lang, int count)>();
+        var configSupportedLanguages = ((ITranslationsStore)this).Config?.SupportedLanguages;
+        if (configSupportedLanguages == null) return translationsCount;
+        foreach (var lang in configSupportedLanguages)
+        {
+            var filePath = $@"{TranslationsPath}/translations.{lang.GetISOCode()}.json";
+            if (!File.Exists(filePath)) continue;
+
+            await using var fs = new FileStream(filePath, FileMode.Open);
+            using var document = await JsonDocument.ParseAsync(fs);
+
+            var count = document.RootElement
+                .EnumerateObject().Count();
+            translationsCount.Add((lang, count));
+        }
+
+        return translationsCount;
+    }
 }
