@@ -17,7 +17,14 @@
         {
             @foreach(var (lang, count) in translationsCount)
             {
-                <p>@lang.GetName() - @count (@(count * 100 / baseNumber)%)</p>
+                <FluentStack Style="margin: 30px;">
+                    <FluentLabel Style="width: 200px;">@lang.GetName() - @(Math.Min(count * 100 / baseNumber, 100))%</FluentLabel>
+
+                    <FluentProgress Min="0" Max="100" Value="@(count * 100 / baseNumber)"
+                                    Stroke="ProgressStroke.Normal"
+                                    Color="ProgressColor.Primary"
+                                    Width="200px" />
+                </FluentStack>
             }
         }
     </Authorized>
@@ -35,6 +42,11 @@
         await base.OnInitializedAsync();
         var defaultLanguage = Translator.GetDefaultLanguage();
         translationsCount = await Translator.GetTranslationsCount();
+        translationsCount.Sort((a, b) =>
+        {
+            if (defaultLanguage != null) return a.lang == defaultLanguage.Value ? -1 : b.lang == defaultLanguage.Value ? 1 : b.count - a.count;
+            return b.count - a.count;
+        });
         baseNumber = defaultLanguage.HasValue ? translationsCount.Find(x => x.lang == defaultLanguage).count : translationsCount.MaxBy(x => x.count).count;
     }
 }

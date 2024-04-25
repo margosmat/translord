@@ -117,7 +117,11 @@ public sealed class FileStore(FileStoreOptions options, ITranslationsCache? cach
         foreach (var lang in configSupportedLanguages)
         {
             var filePath = $@"{TranslationsPath}/translations.{lang.GetISOCode()}.json";
-            if (!File.Exists(filePath)) continue;
+            if (!File.Exists(filePath))
+            {
+                translationsCount.Add((lang, 0));
+                continue;
+            }
 
             await using var fs = new FileStream(filePath, FileMode.Open);
             using var document = await JsonDocument.ParseAsync(fs);
