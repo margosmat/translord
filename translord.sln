@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "translord.Manager", "transl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "translord.RedisCache", "translord.RedisCache\translord.RedisCache.csproj", "{D5D64505-A357-4779-878B-C9364A87D4E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "translord.DeepL", "translord.DeepL\translord.DeepL.csproj", "{86785580-9599-4388-9E03-B48BAECA2A2E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,7 @@ Global
 		{907F28A0-AE24-4618-94D1-4299B0FFEA14} = {EF1DD318-5400-4DA8-8D68-BAD15B855322}
 		{09D7F0A2-AEEE-49A4-907B-6E00CC01C893} = {EF1DD318-5400-4DA8-8D68-BAD15B855322}
 		{D5D64505-A357-4779-878B-C9364A87D4E8} = {EF1DD318-5400-4DA8-8D68-BAD15B855322}
+		{86785580-9599-4388-9E03-B48BAECA2A2E} = {EF1DD318-5400-4DA8-8D68-BAD15B855322}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{620117CD-D3D2-419D-BE8D-C545438A4A99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -61,5 +64,9 @@ Global
 		{D5D64505-A357-4779-878B-C9364A87D4E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5D64505-A357-4779-878B-C9364A87D4E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5D64505-A357-4779-878B-C9364A87D4E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86785580-9599-4388-9E03-B48BAECA2A2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86785580-9599-4388-9E03-B48BAECA2A2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86785580-9599-4388-9E03-B48BAECA2A2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86785580-9599-4388-9E03-B48BAECA2A2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
