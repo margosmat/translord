@@ -10,4 +10,8 @@
       <ProjectReference Include="..\translord\translord.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="DeepL.net" Version="1.9.0" />
+    </ItemGroup>
+
 </Project>

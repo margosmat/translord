@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\translord.DeepL\translord.DeepL.csproj" />
       <ProjectReference Include="..\..\translord.EntityFramework.Postgres\translord.EntityFramework.Postgres.csproj" />
       <ProjectReference Include="..\..\translord.Manager\translord.Manager.csproj" />
       <ProjectReference Include="..\..\translord.RedisCache\translord.RedisCache.csproj" />

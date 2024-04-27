@@ -6,7 +6,7 @@ using translord.Models;
 
 namespace translord.EntityFramework;
 
-public class EfStore : ITranslationsStore
+internal class EfStore : ITranslationsStore
 {
     private readonly TranslationsDbContext _context;
 

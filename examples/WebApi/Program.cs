@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using translord;
 using translord.Core;
+using translord.DeepL;
 using translord.EntityFramework;
 using translord.EntityFramework.Postgres;
 using translord.Enums;
@@ -23,6 +24,10 @@ builder.Services.AddTranslordRedisCache(x =>
 builder.Services.AddTranslordFileStore(options =>
 {
     options.TranslationsPath = Path.Combine(Directory.GetCurrentDirectory(), "translations");
+});
+builder.Services.AddTranslordDeepLTranslator(options =>
+{
+    options.AuthKey = builder.Configuration["DeepLAuthKey"];
 });
 // builder.Services.AddTranslordPostgresStore(options =>
 //     options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty);

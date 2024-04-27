@@ -89,3 +89,9 @@ h1:focus {
         position: sticky;
     }
 }
+
+.translations-dialog {
+    .translation-wrapper label {
+        width: 100px;
+    }
+}

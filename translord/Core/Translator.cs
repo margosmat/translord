@@ -4,10 +4,14 @@ using translord.Models;
 
 namespace translord.Core;
 
-internal sealed class Translator(TranslatorConfiguration config, ITranslationsStore translationsStore) : ITranslator
+internal sealed class Translator(
+    TranslatorConfiguration config,
+    ITranslationsStore translationsStore,
+    ILanguageTranslator? languageTranslator) : ITranslator
 {
     private TranslatorConfiguration Config { get; } = config;
     private ITranslationsStore TranslationsStore { get; } = translationsStore;
+    public bool IsTranslationSupported { get; } = languageTranslator is not null;
 
     public async Task<string> GetTranslation(string key, Language language)
     {
@@ -47,6 +51,7 @@ internal sealed class Translator(TranslatorConfiguration config, ITranslationsSt
                     var langTranslations = await GetSingleLanguageTranslations(allKeys, supportedLanguage);
                     allLanguagesTranslations.AddRange(langTranslations);
                 }
+
                 translations = allLanguagesTranslations.ToList();
             }
         }
@@ -73,7 +78,9 @@ internal sealed class Translator(TranslatorConfiguration config, ITranslationsSt
         return allKeys.Select(x =>
         {
             var matchingElement = jsonElements.Find(y => y.Name.Equals(x));
-            var value = matchingElement.Value.ValueKind == JsonValueKind.Undefined ? String.Empty : matchingElement.Value.GetString();
+            var value = matchingElement.Value.ValueKind == JsonValueKind.Undefined
+                ? String.Empty
+                : matchingElement.Value.GetString();
             return new Translation
             {
                 Language = language,
@@ -119,5 +126,21 @@ internal sealed class Translator(TranslatorConfiguration config, ITranslationsSt
     public async Task<List<(Language lang, int count)>> GetTranslationsCount()
     {
         return await TranslationsStore.GetTranslationsCount();
+    }
+
+    public async Task<string> Translate(string text, Language from, Language to)
+    {
+        return await languageTranslator!.Translate(text, from, to);
+    }
+
+    public async Task<List<string>> Translate(string text, Language from, List<Language> to)
+    {
+        return await languageTranslator!.Translate(text, from, to);
+    }
+
+    public async Task<(Language lang, List<string> translations)> Translate(List<string> text, Language from,
+        List<Language> to)
+    {
+        return await languageTranslator!.Translate(text, from, to);
     }
 }

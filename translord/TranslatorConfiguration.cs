@@ -9,15 +9,19 @@ public record TranslatorConfigurationOptions
     public Language? DefaultLanguage { get; set; }
 }
 
-public class TranslatorConfiguration(TranslatorConfigurationOptions options, ITranslationsStore store)
+public class TranslatorConfiguration(
+    TranslatorConfigurationOptions options,
+    ITranslationsStore store,
+    ILanguageTranslator? languageTranslator = null)
 {
     public IList<Language> SupportedLanguages { get; } = options.SupportedLanguages;
     public Language? DefaultLanguage { get; } = options.DefaultLanguage;
     private ITranslationsStore TranslationsStore { get; } = store;
+    private ILanguageTranslator? LanguageTranslator { get; } = languageTranslator;
 
     public ITranslator CreateTranslator()
     {
         TranslationsStore.Config = this;
-        return new Translator(this, TranslationsStore);
+        return new Translator(this, TranslationsStore, LanguageTranslator);
     }
 }

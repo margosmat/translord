@@ -3,7 +3,7 @@
 @inject ITranslator Translator
 @implements IDialogContentComponent<GroupedTranslations>
 
-<FluentDialogBody>
+<FluentDialogBody Class="translations-dialog">
     <div>
         @if (IsAddingNewLabel)
         {
@@ -18,20 +18,44 @@
         <br/>
         @foreach (var lang in Translator.GetSupportedLanguages())
         {
-            <FluentTextField @bind-Value="@Content.Translations.Find(x => x.Language == lang)!.Value" Label="@lang.GetName()"></FluentTextField>
+            <FluentStack Orientation="Orientation.Horizontal" Class="translation-wrapper">
+                <FluentTextField
+                    @bind-Value="@Content.Translations.Find(x => x.Language == lang)!.Value"
+                    Label="@lang.GetName()"
+                    Required="@(DefaultLang == lang)">
+                </FluentTextField>
+                @if (Translator.IsTranslationSupported)
+                {
+                    <FluentButton
+                        IconStart="@(new Icons.Regular.Size16.Translate())"
+                        @onclick="@(() => TranslateLabel(lang))"
+                        Disabled="@(Translator.GetDefaultLanguage().HasValue ? Content.Translations.Find(x => x.Language == Translator.GetDefaultLanguage()) is null : Content.Translations.All(x => string.IsNullOrEmpty(x.Value)))">
+                    </FluentButton>
+                }
+            </FluentStack>
         }
     </div>
 </FluentDialogBody>
 
 @code {
-    [Parameter]
-    public GroupedTranslations Content { get; set; } = default!;
+    [Parameter] public GroupedTranslations Content { get; set; } = default!;
 
     public bool IsAddingNewLabel { get; private set; }
-    
+    public Language? DefaultLang { get; private set; }
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         IsAddingNewLabel = string.IsNullOrEmpty(Content.Key);
+        DefaultLang = Translator.GetDefaultLanguage();
     }
+
+    private async Task TranslateLabel(Language to)
+    {
+        var fromLang = DefaultLang ??
+                       Content.Translations.First(x => x.Language != to && !string.IsNullOrEmpty(x.Value)).Language;
+        var translation = await Translator.Translate(Content.Translations.Find(x => x.Language == fromLang)!.Value, fromLang, to);
+        Content.Translations.Find(x => x.Language == to)!.Value = translation;
+    }
+
 }
