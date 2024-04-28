@@ -34,7 +34,7 @@ builder.Services.AddTranslordDeepLTranslator(options =>
 // builder.Services.AddTranslordCustomStore<CustomTranslationsStore>();
 builder.Services.AddTranslord(o =>
 {
-    List<Language> supportedLanguages = [Language.English, Language.Polish, Language.German, Language.French, Language.Italian, Language.Spanish, Language.Ukrainian, Language.Czech];
+    List<Language> supportedLanguages = [Language.English, Language.Polish, Language.German, Language.French, Language.Japanese, Language.Spanish, Language.Ukrainian, Language.Czech];
     o.SupportedLanguages = supportedLanguages;
     o.DefaultLanguage = Language.English;
 });

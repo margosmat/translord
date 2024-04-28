@@ -9,7 +9,8 @@ public enum Language
     Spanish = 5,
     Italian = 6,
     Ukrainian = 7,
-    Czech = 8
+    Czech = 8,
+    Japanese = 9,
 }
 
 public static class LanguageExtensions
@@ -26,6 +27,7 @@ public static class LanguageExtensions
             case Language.Italian: return "it";
             case Language.Ukrainian: return "uk";
             case Language.Czech: return "cs";
+            case Language.Japanese: return "ja";
             default: throw new NotImplementedException("Language is not implemented yet.");
         }
     }
@@ -42,6 +44,7 @@ public static class LanguageExtensions
             case Language.Italian: return "Italian";
             case Language.Ukrainian: return "Ukrainian";
             case Language.Czech: return "Czech";
+            case Language.Japanese: return "Japanese";
             default: throw new NotImplementedException("Language is not implemented yet.");
         }
     }

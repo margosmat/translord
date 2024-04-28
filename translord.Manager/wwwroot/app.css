@@ -12,6 +12,10 @@ a, .btn-link {
     border-color: #1861ac;
 }
 
+main {
+    width: calc(100% - 250px);
+}
+
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
@@ -52,10 +56,10 @@ h1:focus {
 
 .translations-page {
     .grid {
-        height: 25rem;
-        overflow-y: auto;
+        overflow: auto;
+        height: 80vh;
     }
-
+    
     .grid table {
         min-width: 100%;
     }
@@ -93,5 +97,11 @@ h1:focus {
 .translations-dialog {
     .translation-wrapper label {
         width: 100px;
+    }
+}
+
+@media (max-width: 640px) {
+    main {
+        width: 100%;
     }
 }
