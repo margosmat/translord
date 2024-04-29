@@ -40,8 +40,8 @@
 @code {
     [Parameter] public GroupedTranslations Content { get; set; } = default!;
 
-    public bool IsAddingNewLabel { get; private set; }
-    public Language? DefaultLang { get; private set; }
+    bool IsAddingNewLabel { get; set; }
+    Language? DefaultLang { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

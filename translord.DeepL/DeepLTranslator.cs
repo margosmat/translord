@@ -11,9 +11,16 @@ internal class DeepLTranslator(Translator translator) : ILanguageTranslator
         return result[0].Text;
     }
 
-    public Task<List<string>> Translate(string text, Language from, List<Language> to)
+    public async Task<List<string>> Translate(string text, Language from, List<Language> to)
     {
-        throw new NotImplementedException();
+        var translations = new List<string>();
+        foreach (var lang in to)
+        {
+            var result = await translator.TranslateTextAsync([text], from.GetISOCode(), lang.GetISOCode());
+            translations.Add(result[0].Text);
+        }
+        
+        return translations;
     }
 
     public Task<(Language lang, List<string> translations)> Translate(List<string> text, Language from,

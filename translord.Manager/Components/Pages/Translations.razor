@@ -30,14 +30,15 @@
                 Loading="@(_itemsQueryable is null || !_itemsQueryable.Any())"
                 ResizableColumns="true"
                 GenerateHeader="GenerateHeaderOption.Sticky"
-                Style="@($"width: {gridSize}px")"
+                Style="@($"width: {_gridSize}px")"
                 SortByAscending="true"
                 GridTemplateColumns="@($"200px 150px {string.Join(" ", Translator.GetSupportedLanguages().Select(_ => "200px"))}")"
             >
                 <PropertyColumn Property="@(x => x.Key)" Sortable="true" InitialSortDirection="SortDirection.Auto" IsDefaultSortColumn />
                 <TemplateColumn Title="Actions" Context="actionsContext">
-                    <FluentButton IconStart="@(new Icons.Regular.Size28.Pen())" @onclick="@(() => OpenDialogAsync(actionsContext))"></FluentButton>
-                    <FluentButton IconStart="@(new Icons.Regular.Size28.Delete().WithColor(Color.Warning))" @onclick="@(async () => await RemoveTranslation(actionsContext.Key))"></FluentButton>
+                    <FluentButton IconStart="@(new Icons.Regular.Size24.Pen())" @onclick="@(() => OpenDialogAsync(actionsContext))"></FluentButton>
+                    <FluentButton IconStart="@(new Icons.Regular.Size24.Delete().WithColor(Color.Warning))" @onclick="@(async () => await RemoveTranslation(actionsContext.Key))"></FluentButton>
+                    <FluentButton IconStart="@(new Icons.Filled.Size24.Translate())" @onclick="@(async () => await TranslateLabel(actionsContext))"></FluentButton>
                 </TemplateColumn>
                 @foreach (var lang in Translator.GetSupportedLanguages())
                 {
@@ -52,13 +53,15 @@
 
 @code {
     IQueryable<IGrouping<string, Translation>>? _itemsQueryable;
-    int gridSize = 0;
+    int _gridSize = 0;
+    Language? _defaultLang;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         await RefreshData();
-        gridSize = 350 + Translator.GetSupportedLanguages().Count * 200;
+        _gridSize = 350 + Translator.GetSupportedLanguages().Count * 200;
+        _defaultLang = Translator.GetDefaultLanguage();
     }
     
     private async Task RefreshData()
@@ -71,6 +74,20 @@
     {
         await Translator.RemoveTranslation(key);
         await RefreshData();
+    }
+
+    private async Task TranslateLabel(IGrouping<string, Translation> t)
+    {
+        var fromTranslation = _defaultLang.HasValue ? t.First(x => x.Language == _defaultLang) :
+                       t.First(x => !string.IsNullOrEmpty(x.Value));
+        var toTranslate = Translator.GetSupportedLanguages().Where(lang => t.All(x => x.Language != lang) || string.IsNullOrEmpty(t.First(x => x.Language == lang).Value)).ToList();
+        var translations = await Translator.Translate(fromTranslation.Value, fromTranslation.Language, toTranslate);
+        foreach (var item in toTranslate.Select((lang, index) => new { lang, index }))
+        {
+            await Translator.SaveTranslation(t.Key, item.lang, translations[item.index]);
+            var translationToUpdate = t.First(x => x.Language == item.lang);
+            translationToUpdate.Value = translations[item.index];
+        }
     }
 
     private async Task OpenDialogAsync(IGrouping<string, Translation>? t = null)
