@@ -71,18 +71,18 @@ var translations = await translator.GetAllTranslations(Language.English);
 
 ### Must have
 
-- [ ] modularity (in progress)
-- [ ] easy configuration (in progress)
-- [ ] storing (using EF Core) (in progress)
-- [ ] translations (Google Translate API?)
-- [ ] CMS-like panel (in progress)
+- [x] modularity
+- [x] easy configuration
+- [x] storing (EF Core/Postgres/File)
+- [x] DeepL translations
+- [x] CMS-like panel
 - [ ] import of existing translations
 - [ ] examples (in progress)
 
 ### Nice to have
 
 - [ ] AI based translations
-- [ ] caching
+- [ ] caching (in progress)
 - [ ] role-based access to the CMS panel
 - [ ] translations revision
 
