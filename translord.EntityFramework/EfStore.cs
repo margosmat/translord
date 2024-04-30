@@ -9,19 +9,28 @@ namespace translord.EntityFramework;
 internal class EfStore : ITranslationsStore
 {
     private readonly TranslationsDbContext _context;
+    private readonly ITranslationsCache? _cache;
 
     TranslatorConfiguration? ITranslationsStore.Config { get; set; }
 
-    public EfStore(TranslationsDbContext context)
+    public EfStore(TranslationsDbContext context, ITranslationsCache? cache)
     {
         _context = context;
+        _cache = cache;
     }
     
     public async Task<string> GetSerializedTranslations(Language language)
     {
+        if (_cache is not null)
+        {
+            var json = await _cache.Get($"{language}");
+            if (!string.IsNullOrEmpty(json)) return json;
+        }
+
         var translations = await _context.Translations.Where(x => x.Language == language).ToDictionaryAsync(x => x.Key, x => x.Value);
-        var json = JsonSerializer.Serialize(translations);
-        return json;
+        var serializedJson = JsonSerializer.Serialize(translations);
+        if (_cache is not null) await _cache.Add($"{language}", serializedJson);
+        return serializedJson;
     }
     
     public async Task<List<string>> GetAllKeys()
@@ -44,6 +53,8 @@ internal class EfStore : ITranslationsStore
         }
 
         await _context.SaveChangesAsync();
+
+        if (_cache is not null) await _cache.Remove($"{language}");
     }
 
     public async Task RemoveTranslation(string key)
@@ -53,6 +64,10 @@ internal class EfStore : ITranslationsStore
         {
             _context.Translations.RemoveRange(translationsToRemove);
             await _context.SaveChangesAsync();
+            foreach (var lang in translationsToRemove.Select(x => x.Language).Distinct())
+            {
+                if (_cache is not null) await _cache.Remove($"{lang}");
+            }
         }
     }
 
