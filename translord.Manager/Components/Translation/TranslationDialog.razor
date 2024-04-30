@@ -7,7 +7,12 @@
     <div>
         @if (IsAddingNewLabel)
         {
-            <FluentTextField @bind-Value="@Content.Key" Label="Key"></FluentTextField>
+            <FluentTextField
+                Value="@Content.Key"
+                ValueChanged="@(s => { Content.Key = s; ValidateDialog(); })"
+                Label="Key"
+                Required>
+            </FluentTextField>
         }
         else
         {
@@ -20,7 +25,8 @@
         {
             <FluentStack Orientation="Orientation.Horizontal" Class="translation-wrapper">
                 <FluentTextField
-                    @bind-Value="@Content.Translations.Find(x => x.Language == lang)!.Value"
+                    ValueChanged="@(s => { Content.Translations.Find(x => x.Language == lang)!.Value = s; ValidateDialog(); })"
+                    Value="@Content.Translations.Find(x => x.Language == lang)!.Value"
                     Label="@lang.GetName()"
                     Required="@(DefaultLang == lang)">
                 </FluentTextField>
@@ -40,6 +46,9 @@
 @code {
     [Parameter] public GroupedTranslations Content { get; set; } = default!;
 
+    [CascadingParameter]
+    public FluentDialog? Dialog { get; set; }
+
     bool IsAddingNewLabel { get; set; }
     Language? DefaultLang { get; set; }
 
@@ -48,6 +57,19 @@
         await base.OnInitializedAsync();
         IsAddingNewLabel = string.IsNullOrEmpty(Content.Key);
         DefaultLang = Translator.GetDefaultLanguage();
+        ValidateDialog();
+    }
+
+    private void ValidateDialog()
+    {
+        if (DefaultLang.HasValue)
+        {
+            Dialog?.TogglePrimaryActionButton(!string.IsNullOrEmpty(Content.Translations.FirstOrDefault(x => x.Language == DefaultLang)?.Value) && !string.IsNullOrEmpty(Content.Key));
+        }
+        else
+        {
+            Dialog?.TogglePrimaryActionButton(Content.Translations.Any(x => string.IsNullOrEmpty(x.Value)) && !string.IsNullOrEmpty(Content.Key));
+        }
     }
 
     private async Task TranslateLabel(Language to)
@@ -57,5 +79,4 @@
         var translation = await Translator.Translate(Content.Translations.Find(x => x.Language == fromLang)!.Value, fromLang, to);
         Content.Translations.Find(x => x.Language == to)!.Value = translation;
     }
-
 }
