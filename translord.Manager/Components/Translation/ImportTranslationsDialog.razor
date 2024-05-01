@@ -1,0 +1,44 @@
+@using translord.Enums
+@using translord.Manager.Models
+@inject ITranslator Translator
+@implements IDialogContentComponent
+
+<FluentDialogBody Class="import-translations-dialog">
+    @foreach(var language in Translator.GetSupportedLanguages())
+    {
+        <FluentStack Orientation="Orientation.Horizontal">
+            <span>@language.GetName()</span>
+            <FluentInputFile @ref="@myFileUploader"
+                             DragDropZoneVisible="false"
+                             Mode="InputFileMode.SaveToTemporaryFolder"
+                             Multiple="false"
+                             AnchorId="MyUploadButton"
+                             MaximumFileSize="@(100 * 1024 * 1024)"
+                             Accept=".txt, .json"
+                             OnCompleted="@OnCompleted" />
+
+            <FluentButton Id="MyUploadButton" Appearance="Appearance.Accent">
+                Upload @language.GetName() file
+            </FluentButton>
+            @if (Files.Any())
+            {
+                <div>
+                    <span>@Files.First().Name</span> - 
+                    <span>@($"{Decimal.Divide(@Files.First().Size, 1024):N} KB")</span> - 
+                    <span>@Files.First().ContentType</span>
+                </div>
+            }
+        </FluentStack>
+    }
+</FluentDialogBody>
+
+@code {
+    FluentInputFile? myFileUploader = default!;
+
+    FluentInputFileEventArgs[] Files = Array.Empty<FluentInputFileEventArgs>();
+
+    void OnCompleted(IEnumerable<FluentInputFileEventArgs> files)
+    {
+        Files = files.ToArray();
+    }
+}

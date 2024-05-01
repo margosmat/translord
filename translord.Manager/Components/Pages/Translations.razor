@@ -16,13 +16,29 @@
     <div class="translations-page">
         <h3>Translations</h3>
 
-        <FluentButton
-            Appearance="Appearance.Accent"
-            IconStart="@(new Icons.Regular.Size16.Add())"
-            @onclick="@(() => OpenDialogAsync())"
-        >
-            Add new
-        </FluentButton>
+        <FluentStack Orientation="Orientation.Horizontal">
+            <FluentButton
+                Appearance="Appearance.Accent"
+                IconStart="@(new Icons.Regular.Size16.Add())"
+                @onclick="@(() => OpenDialogAsync())"
+            >
+                Add new
+            </FluentButton>
+            <FluentButton
+                Appearance="Appearance.Accent"
+                IconStart="@(new Icons.Regular.Size16.Translate())"
+                @onclick="@(() => OpenDialogAsync())"
+            >
+                Translate missing
+            </FluentButton>
+            <FluentButton
+                Appearance="Appearance.Accent"
+                IconStart="@(new Icons.Regular.Size16.ArrowImport())"
+                @onclick="@(OpenImportDialogAsync)"
+            >
+                Import
+            </FluentButton>
+        </FluentStack>
         <div class="grid">
             <FluentDataGrid
                 Items="@_itemsQueryable"
@@ -130,4 +146,21 @@
         }
     }
 
+    private async Task OpenImportDialogAsync()
+    {
+        DialogParameters parameters = new()
+        {
+            Title = "Import",
+            PrimaryAction = "Import",
+            PrimaryActionEnabled = true,
+            SecondaryAction = "Cancel",
+            Width = "500px",
+            TrapFocus = true,
+            Modal = true,
+            PreventScroll = true
+        };
+        
+        IDialogReference dialog = await DialogService.ShowDialogAsync<ImportTranslationsDialog>(parameters);
+        DialogResult result = await dialog.Result;
+    }
 }
