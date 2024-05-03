@@ -7,25 +7,25 @@
     @foreach(var language in Translator.GetSupportedLanguages())
     {
         <FluentStack Orientation="Orientation.Horizontal">
-            <span>@language.GetName()</span>
+            <span style="width: 150px">@language.GetName()</span>
             <FluentInputFile @ref="@myFileUploader"
                              DragDropZoneVisible="false"
                              Mode="InputFileMode.SaveToTemporaryFolder"
                              Multiple="false"
-                             AnchorId="MyUploadButton"
+                             AnchorId="@($"MyUploadButton-{language.GetName()}")"
                              MaximumFileSize="@(100 * 1024 * 1024)"
                              Accept=".txt, .json"
-                             OnCompleted="@OnCompleted" />
+                             OnCompleted="@(x => OnCompleted(language, x))" />
 
-            <FluentButton Id="MyUploadButton" Appearance="Appearance.Accent">
+            <FluentButton Id="@($"MyUploadButton-{language.GetName()}")" Appearance="Appearance.Accent" Style="width: 200px">
                 Upload @language.GetName() file
             </FluentButton>
-            @if (Files.Any())
+            @if (Files.TryGetValue(language, out var file))
             {
                 <div>
-                    <span>@Files.First().Name</span> - 
-                    <span>@($"{Decimal.Divide(@Files.First().Size, 1024):N} KB")</span> - 
-                    <span>@Files.First().ContentType</span>
+                    <span>@file.Name</span> - 
+                    <span>@($"{Decimal.Divide(@file.Size, 1024):N} KB")</span> - 
+                    <span>@file.ContentType</span>
                 </div>
             }
         </FluentStack>
@@ -35,10 +35,10 @@
 @code {
     FluentInputFile? myFileUploader = default!;
 
-    FluentInputFileEventArgs[] Files = Array.Empty<FluentInputFileEventArgs>();
+    Dictionary<Language, FluentInputFileEventArgs> Files = new Dictionary<Language, FluentInputFileEventArgs>();
 
-    void OnCompleted(IEnumerable<FluentInputFileEventArgs> files)
+    void OnCompleted(Language lang, IEnumerable<FluentInputFileEventArgs> files)
     {
-        Files = files.ToArray();
+        Files[lang] = files.First();
     }
 }
