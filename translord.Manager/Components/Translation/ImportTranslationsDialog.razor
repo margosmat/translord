@@ -3,11 +3,11 @@
 @inject ITranslator Translator
 @implements IDialogContentComponent
 
-<FluentDialogBody Class="import-translations-dialog">
+<FluentDialogBody Class="import-translations-dialog" Style="overflow-y: auto">
     @foreach(var language in Translator.GetSupportedLanguages())
     {
-        <FluentStack Orientation="Orientation.Horizontal">
-            <span style="width: 150px">@language.GetName()</span>
+        <FluentStack Orientation="Orientation.Horizontal" Style="margin-top: 30px">
+            <span style="width: 120px">@language.GetName()</span>
             <FluentInputFile @ref="@myFileUploader"
                              DragDropZoneVisible="false"
                              Mode="InputFileMode.SaveToTemporaryFolder"
@@ -22,10 +22,9 @@
             </FluentButton>
             @if (Files.TryGetValue(language, out var file))
             {
-                <div>
+                <div style="font-size: 11px">
                     <span>@file.Name</span> - 
-                    <span>@($"{Decimal.Divide(@file.Size, 1024):N} KB")</span> - 
-                    <span>@file.ContentType</span>
+                    <span>@($"{Decimal.Divide(@file.Size, 1024):N} KB")</span>
                 </div>
             }
         </FluentStack>
