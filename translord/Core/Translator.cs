@@ -143,4 +143,9 @@ internal sealed class Translator(
     {
         return await languageTranslator!.Translate(text, from, to);
     }
+
+    public Task ImportTranslations(JsonDocument json, Language language)
+    {
+        throw new NotImplementedException();
+    }
 }

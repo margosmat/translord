@@ -3,6 +3,7 @@
 @using translord.Enums
 @using translord.Models
 @using Microsoft.AspNetCore.Authorization
+@using System.Text.Json
 @using translord.Manager.Components.Translation
 @using translord.Manager.Models
 @inject ITranslator Translator
@@ -161,7 +162,18 @@
             PreventScroll = true
         };
         
-        IDialogReference dialog = await DialogService.ShowDialogAsync<ImportTranslationsDialog>(parameters);
+        IDialogReference dialog = await DialogService.ShowDialogAsync<ImportTranslationsDialog>(new Dictionary<Language, FluentInputFileEventArgs>(), parameters);
         DialogResult result = await dialog.Result;
+
+        if (result is { Data: Dictionary<Language, FluentInputFileEventArgs> data, Cancelled: false })
+        {
+            foreach (var import in data)
+            {
+                if (import.Value.Stream is null) continue;
+                var document = await JsonDocument.ParseAsync(import.Value.Stream);
+                await Translator.ImportTranslations(document, import.Key);
+                document.Dispose();
+            }
+        }
     }
 }

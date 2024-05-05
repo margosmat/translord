@@ -1,7 +1,6 @@
 @using translord.Enums
-@using translord.Manager.Models
 @inject ITranslator Translator
-@implements IDialogContentComponent
+@implements IDialogContentComponent<Dictionary<Language, FluentInputFileEventArgs>>
 
 <FluentDialogBody Class="import-translations-dialog" Style="overflow-y: auto">
     @foreach(var language in Translator.GetSupportedLanguages())
@@ -10,7 +9,7 @@
             <span style="width: 120px">@language.GetName()</span>
             <FluentInputFile @ref="@myFileUploader"
                              DragDropZoneVisible="false"
-                             Mode="InputFileMode.SaveToTemporaryFolder"
+                             Mode="InputFileMode.Stream"
                              Multiple="false"
                              AnchorId="@($"MyUploadButton-{language.GetName()}")"
                              MaximumFileSize="@(100 * 1024 * 1024)"
@@ -20,7 +19,7 @@
             <FluentButton Id="@($"MyUploadButton-{language.GetName()}")" Appearance="Appearance.Accent" Style="width: 200px">
                 Upload @language.GetName() file
             </FluentButton>
-            @if (Files.TryGetValue(language, out var file))
+            @if (Content.TryGetValue(language, out var file))
             {
                 <div style="font-size: 11px">
                     <span>@file.Name</span> - 
@@ -34,10 +33,10 @@
 @code {
     FluentInputFile? myFileUploader = default!;
 
-    Dictionary<Language, FluentInputFileEventArgs> Files = new Dictionary<Language, FluentInputFileEventArgs>();
+    [Parameter] public Dictionary<Language, FluentInputFileEventArgs> Content { get; set; }
 
     void OnCompleted(Language lang, IEnumerable<FluentInputFileEventArgs> files)
     {
-        Files[lang] = files.First();
+        Content[lang] = files.First();
     }
 }

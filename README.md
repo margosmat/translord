@@ -76,7 +76,7 @@ var translations = await translator.GetAllTranslations(Language.English);
 - [x] storing (EF Core/Postgres/File)
 - [x] DeepL translations
 - [x] CMS-like panel
-- [ ] import of existing translations
+- [ ] import of existing translations (in progress)
 - [ ] examples (in progress)
 
 ### Nice to have

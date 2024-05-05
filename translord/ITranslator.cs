@@ -1,3 +1,4 @@
+using System.Text.Json;
 using translord.Enums;
 using translord.Models;
 
@@ -17,4 +18,5 @@ public interface ITranslator
     Task<string> Translate(string text, Language from, Language to);
     Task<List<string>> Translate(string text, Language from, List<Language> to);
     Task<(Language lang, List<string> translations)> Translate(List<string> text, Language from, List<Language> to);
+    Task ImportTranslations(JsonDocument json, Language language);
 }
