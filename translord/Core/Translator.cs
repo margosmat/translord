@@ -144,8 +144,19 @@ internal sealed class Translator(
         return await languageTranslator!.Translate(text, from, to);
     }
 
-    public Task ImportTranslations(JsonDocument json, Language language)
+    public async Task ImportTranslations(JsonDocument json, Language language)
     {
-        throw new NotImplementedException();
+        var translations = json.RootElement
+            .EnumerateObject()
+            .Select(p => new Translation
+            {
+                Key = p.Name,
+                Value = p.Value.GetString() ?? string.Empty,
+                Language = language
+            }).Where(x => !string.IsNullOrEmpty(x.Value)).ToList();
+        foreach (var translation in translations)
+        {
+            await TranslationsStore.SaveTranslation(translation.Key, translation.Language, translation.Value);
+        }
     }
 }
