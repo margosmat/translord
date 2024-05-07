@@ -59,6 +59,20 @@ h1:focus {
     .grid {
         overflow: auto;
         height: 80vh;
+        
+        fluent-data-grid-cell[grid-column="1"] {
+            z-index: 1;
+            position: sticky;
+            left: 0;
+            background-color: white;
+        }
+        
+        fluent-data-grid-cell[grid-column="2"] {
+            z-index: 1;
+            position: sticky;
+            left: 200px;
+            background-color: white;
+        }
     }
     
     .grid table {
