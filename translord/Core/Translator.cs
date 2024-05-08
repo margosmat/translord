@@ -138,12 +138,6 @@ internal sealed class Translator(
         return await languageTranslator!.Translate(text, from, to);
     }
 
-    public async Task<(Language lang, List<string> translations)> Translate(List<string> text, Language from,
-        List<Language> to)
-    {
-        return await languageTranslator!.Translate(text, from, to);
-    }
-
     public async Task ImportTranslations(JsonDocument json, Language language)
     {
         var translations = json.RootElement

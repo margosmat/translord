@@ -28,7 +28,7 @@
             <FluentButton
                 Appearance="Appearance.Accent"
                 IconStart="@(new Icons.Regular.Size16.Translate())"
-                @onclick="@(() => OpenDialogAsync())"
+                @onclick="@(TranslateAllLabels)"
             >
                 Translate missing
             </FluentButton>
@@ -66,12 +66,20 @@
             </FluentDataGrid>
         </div>
     </div>
+    <FluentOverlay @bind-Visible="@_progressOverlayVisible"
+                   Opacity="0.4"
+                   Dismissable="false"
+                   FullScreen="true"
+                   PreventScroll="true">
+        <FluentProgressRing />
+    </FluentOverlay>
 </AuthorizeView>
 
 @code {
     IQueryable<IGrouping<string, Translation>>? _itemsQueryable;
-    int _gridSize = 0;
+    int _gridSize;
     Language? _defaultLang;
+    bool _progressOverlayVisible;
 
     protected override async Task OnInitializedAsync()
     {
@@ -91,6 +99,17 @@
     {
         await Translator.RemoveTranslation(key);
         await RefreshData();
+    }
+
+    private async Task TranslateAllLabels()
+    {
+        if (_itemsQueryable is null) return;
+        _progressOverlayVisible = true;
+        foreach (var item in _itemsQueryable)
+        {
+            await TranslateLabel(item);
+        }
+        _progressOverlayVisible = false;
     }
 
     private async Task TranslateLabel(IGrouping<string, Translation> t)
