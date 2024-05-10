@@ -1,12 +1,6 @@
-using DeepL;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace translord.DeepL;
-
-public record AddTranslordDeepLTranslatorOptions
-{
-    public string AuthKey { get; set; }
-}
 
 public static class TranslordDeepLTranslatorServiceCollectionExtensions
 {
@@ -15,7 +9,7 @@ public static class TranslordDeepLTranslatorServiceCollectionExtensions
     {
         var options = new AddTranslordDeepLTranslatorOptions();
         setupAction(options);
-        services.AddTransient<ILanguageTranslator>(x => new DeepLTranslator(new Translator(options.AuthKey)));
+        services.AddTransient<ILanguageTranslator>(x => new DeepLTranslator(options));
         return services;
     }
 }

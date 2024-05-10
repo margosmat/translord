@@ -3,11 +3,23 @@ using translord.Enums;
 
 namespace translord.DeepL;
 
-internal class DeepLTranslator(Translator translator) : ILanguageTranslator
+public record AddTranslordDeepLTranslatorOptions
 {
+    public string AuthKey { get; set; }
+}
+
+public sealed class DeepLTranslator : ILanguageTranslator
+{
+    private readonly Translator _translator;
+    
+    public DeepLTranslator(AddTranslordDeepLTranslatorOptions options)
+    {
+        _translator = new Translator(options.AuthKey);
+    }
+    
     public async Task<string> Translate(string text, Language from, Language to)
     {
-        var result = await translator.TranslateTextAsync([text], from.GetISOCode(), to.GetISOCode());
+        var result = await _translator.TranslateTextAsync([text], from.GetISOCode(), to.GetISOCode());
         return result[0].Text;
     }
 
@@ -16,7 +28,7 @@ internal class DeepLTranslator(Translator translator) : ILanguageTranslator
         var translations = new List<string>();
         foreach (var lang in to)
         {
-            var result = await translator.TranslateTextAsync([text], from.GetISOCode(), lang.GetISOCode());
+            var result = await _translator.TranslateTextAsync([text], from.GetISOCode(), lang.GetISOCode());
             translations.Add(result[0].Text);
         }
         
