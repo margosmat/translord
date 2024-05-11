@@ -21,6 +21,20 @@ What this tool aims to achieve? To be a central place in your project that handl
 - management
 - revision
 
+## Packages
+- translord
+    - The core library
+- [translord.DeepL](https://github.com/margosmat/translord/tree/main/translord.DeepL)
+    - Library containing [DeepL API](https://www.deepl.com/pro-api?cta=header-pro-api) configuration for texts translation in translord.
+- translord.EntityFramework
+    - Library containing configuration data that uses EntityFramework as its database abstraction.
+- translord.EntityFramework.Postgres
+    - Library extending the `translord.EntityFramework` library with Postgres configuration.
+- translord.Manager
+    - Library containing the TMS admin panel allowing for translations editing/management/translation.
+- translord.RedisCache
+    - Library containing configuration for Redis as the cache for translord.
+
 ## Configuration examples
 
 ### WebApp with FileStore
