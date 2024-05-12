@@ -6,7 +6,7 @@ namespace translord.EntityFramework.Postgres;
 
 public record AddTranslordPostgresStoreOptions
 {
-    public string ConnectionString { get; set; }
+    public string? ConnectionString { get; set; }
 }
 
 public static class TranslordEntityFrameworkPostgresServiceCollectionExtensions
@@ -16,7 +16,8 @@ public static class TranslordEntityFrameworkPostgresServiceCollectionExtensions
     {
         var options = new AddTranslordPostgresStoreOptions();
         setupAction(options);
-        services.AddDbContext<TranslationsDbContext>(o => o.UseNpgsql(options.ConnectionString));
+        var connectionString = options.ConnectionString ?? throw new ArgumentNullException(nameof(options.ConnectionString));
+        services.AddDbContext<TranslationsDbContext>(o => o.UseNpgsql(connectionString));
         services.AddTranslordEfStore();
         return services;
     }

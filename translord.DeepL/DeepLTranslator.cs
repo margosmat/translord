@@ -5,7 +5,7 @@ namespace translord.DeepL;
 
 public record AddTranslordDeepLTranslatorOptions
 {
-    public string AuthKey { get; set; }
+    public string? AuthKey { get; set; }
 }
 
 public sealed class DeepLTranslator : ILanguageTranslator
@@ -14,7 +14,8 @@ public sealed class DeepLTranslator : ILanguageTranslator
     
     public DeepLTranslator(AddTranslordDeepLTranslatorOptions options)
     {
-        _translator = new Translator(options.AuthKey);
+        var authKey = options.AuthKey ?? throw new ArgumentNullException(nameof(options.AuthKey));
+        _translator = new Translator(authKey);
     }
     
     public async Task<string> Translate(string text, Language from, Language to)

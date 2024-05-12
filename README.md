@@ -26,9 +26,9 @@ What this tool aims to achieve? To be a central place in your project that handl
     - The core library
 - [translord.DeepL](https://github.com/margosmat/translord/tree/main/translord.DeepL)
     - Library containing [DeepL API](https://www.deepl.com/pro-api?cta=header-pro-api) configuration for texts translation in translord.
-- translord.EntityFramework
+- [translord.EntityFramework](https://github.com/margosmat/translord/tree/main/translord.EntityFramework)
     - Library containing configuration data that uses EntityFramework as its database abstraction.
-- translord.EntityFramework.Postgres
+- [translord.EntityFramework.Postgres](https://github.com/margosmat/translord/tree/main/translord.EntityFramework.Postgres)
     - Library extending the `translord.EntityFramework` library with Postgres configuration.
 - translord.Manager
     - Library containing the TMS admin panel allowing for translations editing/management/translation.
@@ -68,10 +68,12 @@ builder.AddTranslordManager();
 ```c#
 List<Language> supportedLanguages = [ Language.English, Language.Polish ];
 var path = Path.Combine(Directory.GetCurrentDirectory(), "translations");
+var deeplTranslator = new DeepLTranslator(new AddTranslordDeepLTranslatorOptions { AuthKey = "your-auth-key" });
 var translator =
     new TranslatorConfiguration(
-        new TranslatorConfigurationOptions { SupportedLanguages = supportedLanguages, IsCachingEnabled = true },
-        new FileStore(new FileStoreOptions { TranslationsPath = path })).CreateTranslator();
+        new TranslatorConfigurationOptions { SupportedLanguages = supportedLanguages, DefaultLanguage = Language.English },
+        new FileStore(new FileStoreOptions { TranslationsPath = path }, null),
+        deeplTranslator).CreateTranslator();
 
 var label = await translator.GetTranslation("label.test", Language.Polish);
 var translations = await translator.GetAllTranslations(Language.English);
