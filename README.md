@@ -30,7 +30,7 @@ What this tool aims to achieve? To be a central place in your project that handl
     - Library containing configuration data that uses EntityFramework as its database abstraction.
 - [translord.EntityFramework.Postgres](https://github.com/margosmat/translord/tree/main/translord.EntityFramework.Postgres)
     - Library extending the `translord.EntityFramework` library with Postgres configuration.
-- translord.Manager
+- [translord.Manager](https://github.com/margosmat/translord/tree/main/translord.Manager)
     - Library containing the TMS admin panel allowing for translations editing/management/translation.
 - translord.RedisCache
     - Library containing configuration for Redis as the cache for translord.
