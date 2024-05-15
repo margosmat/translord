@@ -20,7 +20,7 @@ public sealed class DeepLTranslator : ILanguageTranslator
     
     public async Task<string> Translate(string text, Language from, Language to)
     {
-        var result = await _translator.TranslateTextAsync([text], from.GetISOCode(), to.GetISOCode());
+        var result = await _translator.TranslateTextAsync([text], from.GetIsoCode(), to.GetIsoCode());
         return result[0].Text;
     }
 
@@ -29,7 +29,7 @@ public sealed class DeepLTranslator : ILanguageTranslator
         var translations = new List<string>();
         foreach (var lang in to)
         {
-            var result = await _translator.TranslateTextAsync([text], from.GetISOCode(), lang.GetISOCode());
+            var result = await _translator.TranslateTextAsync([text], from.GetIsoCode(), lang.GetIsoCode());
             translations.Add(result[0].Text);
         }
         

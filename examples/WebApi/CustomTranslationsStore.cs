@@ -10,7 +10,7 @@ public class CustomTranslationsStore : ITranslationsStore
     {
         switch (language)
         {
-            case Language.English:
+            case Language.EnglishBritish:
                 return Task.FromResult(JsonSerializer.Serialize(new Dictionary<string, string>
                 {
                     {"label.test", "Test"},

@@ -34,9 +34,9 @@ builder.Services.AddTranslordDeepLTranslator(options =>
 // builder.Services.AddTranslordCustomStore<CustomTranslationsStore>();
 builder.Services.AddTranslord(o =>
 {
-    List<Language> supportedLanguages = [Language.English, Language.Polish, Language.German, Language.French, Language.Japanese, Language.Spanish, Language.Ukrainian, Language.Czech];
+    List<Language> supportedLanguages = [Language.EnglishBritish, Language.Polish, Language.German, Language.French, Language.Japanese, Language.Spanish, Language.Ukrainian, Language.Czech];
     o.SupportedLanguages = supportedLanguages;
-    o.DefaultLanguage = Language.English;
+    o.DefaultLanguage = Language.EnglishBritish;
 });
 builder.AddTranslordManager();
 
@@ -53,7 +53,7 @@ app.UseHttpsRedirection();
 
 app.MapGet("/translations/{language}/{key?}", async (Language language, string? key) =>
     {
-        List<Language> supportedLanguages = new() { Language.English, Language.Polish };
+        List<Language> supportedLanguages = new() { Language.EnglishBritish, Language.Polish };
         var path = Path.Combine(Directory.GetCurrentDirectory(), "translations");
         var translator =
             new TranslatorConfiguration(

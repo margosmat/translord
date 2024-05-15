@@ -23,7 +23,7 @@ public sealed class FileStore(FileStoreOptions options, ITranslationsCache? cach
             if (!string.IsNullOrEmpty(json)) return json;
         }
 
-        var filePath = $@"{TranslationsPath}/translations.{language.GetISOCode()}.json";
+        var filePath = $@"{TranslationsPath}/translations.{language.GetIsoCode()}.json";
         if (!File.Exists(filePath)) return string.Empty;
         var serializedJson = await File.ReadAllTextAsync(filePath);
         if (cache is not null) await cache.Add($"{language}", serializedJson);
@@ -54,7 +54,7 @@ public sealed class FileStore(FileStoreOptions options, ITranslationsCache? cach
 
     private async Task<IEnumerable<string>> GetKeysFromLanguageFile(Language lang)
     {
-        var filePath = $@"{TranslationsPath}/translations.{lang.GetISOCode()}.json";
+        var filePath = $@"{TranslationsPath}/translations.{lang.GetIsoCode()}.json";
         if (!File.Exists(filePath)) return Enumerable.Empty<string>();
 
         await using var fs = new FileStream(filePath, FileMode.Open);
@@ -70,7 +70,7 @@ public sealed class FileStore(FileStoreOptions options, ITranslationsCache? cach
 
     public async Task SaveTranslation(string key, Language language, string value)
     {
-        var filePath = $@"{TranslationsPath}/translations.{language.GetISOCode()}.json";
+        var filePath = $@"{TranslationsPath}/translations.{language.GetIsoCode()}.json";
         var options = new JsonSerializerOptions { WriteIndented = true };
         if (!File.Exists(filePath))
         {
@@ -97,7 +97,7 @@ public sealed class FileStore(FileStoreOptions options, ITranslationsCache? cach
         if (configSupportedLanguages == null) return;
         foreach (var lang in configSupportedLanguages)
         {
-            var filePath = $@"{TranslationsPath}/translations.{lang.GetISOCode()}.json";
+            var filePath = $@"{TranslationsPath}/translations.{lang.GetIsoCode()}.json";
             if (!File.Exists(filePath)) continue;
             var options = new JsonSerializerOptions { WriteIndented = true };
             var jsonString = await File.ReadAllTextAsync(filePath);
@@ -116,7 +116,7 @@ public sealed class FileStore(FileStoreOptions options, ITranslationsCache? cach
         if (configSupportedLanguages == null) return translationsCount;
         foreach (var lang in configSupportedLanguages)
         {
-            var filePath = $@"{TranslationsPath}/translations.{lang.GetISOCode()}.json";
+            var filePath = $@"{TranslationsPath}/translations.{lang.GetIsoCode()}.json";
             if (!File.Exists(filePath))
             {
                 translationsCount.Add((lang, 0));

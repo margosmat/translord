@@ -9,6 +9,7 @@
 
 
     <ItemGroup>
+      <ProjectReference Include="..\..\translord.DeepL\translord.DeepL.csproj" />
       <ProjectReference Include="..\..\translord\translord.csproj" />
     </ItemGroup>
 
