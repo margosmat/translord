@@ -32,7 +32,7 @@ What this tool aims to achieve? To be a central place in your project that handl
     - Library extending the `translord.EntityFramework` library with Postgres configuration.
 - [translord.Manager](https://github.com/margosmat/translord/tree/main/translord.Manager)
     - Library containing the TMS admin panel allowing for translations editing/management/translation.
-- translord.RedisCache
+- [translord.RedisCache](https://github.com/margosmat/translord/tree/main/translord.RedisCache)
     - Library containing configuration for Redis as the cache for translord.
 
 ## Configuration examples

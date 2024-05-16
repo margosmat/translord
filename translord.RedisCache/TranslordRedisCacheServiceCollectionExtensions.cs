@@ -5,9 +5,9 @@ namespace translord.RedisCache;
 
 public record AddTranslordRedisCacheOptions
 {
-    public string Server { get; set; }
+    public string? Server { get; set; }
     public int Port { get; set; }
-    public string Password { get; set; }
+    public string? Password { get; set; }
 }
 
 public static class TranslordRedisCacheServiceCollectionExtensions
@@ -17,11 +17,12 @@ public static class TranslordRedisCacheServiceCollectionExtensions
     {
         var options = new AddTranslordRedisCacheOptions();
         setupAction(options);
+        var server = options.Server ?? throw new ArgumentNullException(nameof(options.Server));
         var configuration = new ConfigurationOptions
         {
             EndPoints = new EndPointCollection
             {
-                { options.Server, options.Port }
+                { server, options.Port }
             },
             Password = options.Password
         };
