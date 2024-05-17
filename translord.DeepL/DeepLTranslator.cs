@@ -35,10 +35,4 @@ public sealed class DeepLTranslator : ILanguageTranslator
         
         return translations;
     }
-
-    public Task<(Language lang, List<string> translations)> Translate(List<string> text, Language from,
-        List<Language> to)
-    {
-        throw new NotImplementedException();
-    }
 }
