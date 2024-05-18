@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Concurrent;
 using translord;
 using translord.Core;
@@ -38,7 +39,8 @@ builder.Services.AddTranslord(o =>
     o.SupportedLanguages = supportedLanguages;
     o.DefaultLanguage = Language.EnglishBritish;
 });
-builder.AddTranslordManager();
+builder.AddTranslordManager(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty));
 
 var app = builder.Build();
 

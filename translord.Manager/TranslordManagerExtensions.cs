@@ -12,7 +12,7 @@ namespace translord.Manager;
 
 public static class TranslordManagerExtensions
 {
-    public static WebApplicationBuilder AddTranslordManager(this WebApplicationBuilder builder)
+    public static WebApplicationBuilder AddTranslordManager(this WebApplicationBuilder builder, Action<DbContextOptionsBuilder> dbcontextOptionsAction)
     {
         // Add services to the container.
         builder.Services.AddRazorComponents()
@@ -30,14 +30,11 @@ public static class TranslordManagerExtensions
             })
             .AddIdentityCookies();
 
-        var connectionString = builder.Configuration.GetConnectionString("ManagerConnection") ??
-                               throw new InvalidOperationException("Connection string 'ManagerConnection' not found.");
-        builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlite(connectionString));
+        builder.Services.AddDbContext<TranslordManagerDbContext>(dbcontextOptionsAction);
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
         builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddEntityFrameworkStores<TranslordManagerDbContext>()
             .AddSignInManager()
             .AddDefaultTokenProviders();
 
