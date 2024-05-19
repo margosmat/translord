@@ -4,10 +4,18 @@ translord.Manager contains the TMS admin panel. In this panel you can manage/tra
 ## Configuration
 ### Web DI
 ```c#
+builder.Services.AddDbContext<TranslordManagerDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty,
+        b => b.MigrationsAssembly("WebApi")));
 builder.AddTranslordManager();
 ```
+Be sure to run the migrations for the translord.Manager, so that the database can be created:
+```bash
+dotnet ef migrations add -c TranslordManagerDbContext Init
+dotnet ef database update -c TranslordManagerDbContext
+```
 
-### Manger configuration 
+### Manager configuration 
 traslord.Manager reads configuration from the main project appsettings.json, there are 2 options that could be configured:
 
 #### BaseAssemblyName

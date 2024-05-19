@@ -1,7 +1,6 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.FluentUI.AspNetCore.Components;
 using translord.Manager.Components;
@@ -12,7 +11,7 @@ namespace translord.Manager;
 
 public static class TranslordManagerExtensions
 {
-    public static WebApplicationBuilder AddTranslordManager(this WebApplicationBuilder builder, Action<DbContextOptionsBuilder> dbcontextOptionsAction)
+    public static WebApplicationBuilder AddTranslordManager(this WebApplicationBuilder builder)
     {
         // Add services to the container.
         builder.Services.AddRazorComponents()
@@ -30,7 +29,6 @@ public static class TranslordManagerExtensions
             })
             .AddIdentityCookies();
 
-        builder.Services.AddDbContext<TranslordManagerDbContext>(dbcontextOptionsAction);
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
         builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -60,8 +58,8 @@ public static class TranslordManagerExtensions
         }
 
         app.UseStaticFiles();
-        var location = Assembly.GetEntryAssembly().Location;
-        var path = location.Remove(location.LastIndexOf('/'));
+        var location = Assembly.GetEntryAssembly()?.Location;
+        var path = location?.Remove(location.LastIndexOf('/'));
         app.UseStaticFiles(new StaticFileOptions {
             FileProvider = new PhysicalFileProvider(path + "/wwwroot")
         });

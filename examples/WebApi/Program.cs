@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Concurrent;
+using System.Reflection;
 using translord;
 using translord.Core;
 using translord.DeepL;
@@ -7,6 +8,7 @@ using translord.EntityFramework;
 using translord.EntityFramework.Postgres;
 using translord.Enums;
 using translord.Manager;
+using translord.Manager.Data;
 using translord.RedisCache;
 using WebApi;
 
@@ -26,21 +28,25 @@ builder.Services.AddTranslordFileStore(options =>
 {
     options.TranslationsPath = Path.Combine(Directory.GetCurrentDirectory(), "translations");
 });
-builder.Services.AddTranslordDeepLTranslator(options =>
-{
-    options.AuthKey = builder.Configuration["DeepLAuthKey"];
-});
+builder.Services.AddTranslordDeepLTranslator(options => { options.AuthKey = builder.Configuration["DeepLAuthKey"]; });
 // builder.Services.AddTranslordPostgresStore(options =>
 //     options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty);
 // builder.Services.AddTranslordCustomStore<CustomTranslationsStore>();
 builder.Services.AddTranslord(o =>
 {
-    List<Language> supportedLanguages = [Language.EnglishBritish, Language.Polish, Language.German, Language.French, Language.Japanese, Language.Spanish, Language.Ukrainian, Language.Czech];
+    List<Language> supportedLanguages =
+    [
+        Language.EnglishBritish, Language.Polish, Language.German, Language.French, Language.Japanese, Language.Spanish,
+        Language.Ukrainian, Language.Czech
+    ];
     o.SupportedLanguages = supportedLanguages;
     o.DefaultLanguage = Language.EnglishBritish;
 });
-builder.AddTranslordManager(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty));
+
+builder.Services.AddDbContext<TranslordManagerDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty,
+        b => b.MigrationsAssembly("WebApi")));
+builder.AddTranslordManager();
 
 var app = builder.Build();
 
