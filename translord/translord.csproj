@@ -4,6 +4,12 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <PackageId>translord</PackageId>
+        <Version>0.1.0</Version>
+        <Author>Mateusz Margos</Author>
+        <Product>translord</Product>
+        <Description>translord - simple TMS to get your translations up and running in no time.</Description>
+        <PackageProjectUrl>https://github.com/margosmat/translord</PackageProjectUrl>
     </PropertyGroup>
     
     <ItemGroup>
