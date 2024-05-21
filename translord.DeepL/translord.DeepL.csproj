@@ -4,6 +4,12 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <PackageId>translord.DeepL</PackageId>
+        <Version>0.1.0</Version>
+        <Author>Mateusz Margos</Author>
+        <Product>translord.DeepL</Product>
+        <Description>translord.DeepL - package using DeepL for texts translation in translord.</Description>
+        <PackageProjectUrl>https://github.com/margosmat/translord/tree/main/translord.DeepL</PackageProjectUrl>
     </PropertyGroup>
 
     <ItemGroup>
