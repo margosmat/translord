@@ -1,16 +1,6 @@
 # translord
 
----
-
-<div align="center">
-
-  ![translord](assets/logo.jpeg)
-
-</div>
-
----
-
-#### translord - simple TMS to get your translations up and running in no time.
+translord - simple TMS to get your translations up and running in no time.
 
 🚧 Project still in the early stages of development 
 
@@ -21,7 +11,7 @@ What this tool aims to achieve? To be a central place in your project that handl
 - management
 - revision
 
-## Packages
+## Packages structure
 - translord
     - The core library
 - [translord.DeepL](https://github.com/margosmat/translord/tree/main/translord.DeepL)
@@ -97,32 +87,4 @@ For now, you can import your translations in one specific way. You need one `.js
 }
 ```
 
-## TMS panel
-
-![TMS panel screenshot](assets/panel_screenshot.png)
-
-## Features
-
-- [x] modularity
-- [x] easy configuration
-- [x] storing (EF Core/Postgres/File)
-- [x] DeepL translations
-- [x] CMS-like panel
-- [x] import of existing translations
-- [x] caching (using Redis)
-- [ ] examples (in progress)
-
-### Ideas for the next features
-
-- [ ] AI based translations
-- [ ] role-based access to the CMS panel
-- [ ] translations revision
-
-## Inspiration
-
-- IdentityServer (as for config and ease of use)
-- Serilog (as for modularity, structure)
-
-## Support
-
-Feel free to add issues with suggestions.
+See [GitHub](https://github.com/margosmat/translord) for more information and examples.

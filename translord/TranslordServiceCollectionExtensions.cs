@@ -33,6 +33,13 @@ public static class TranslordServiceCollectionExtensions
         return services;
     }
 
+    public static IServiceCollection AddTranslordCustomTranslator<T>(this IServiceCollection services)
+        where T : class, ILanguageTranslator
+    {
+        services.AddTransient<ILanguageTranslator, T>();
+        return services;
+    }
+
     public static IServiceCollection AddTranslordFileStore(this IServiceCollection services,
         Action<FileStoreOptions> setupOptions)
     {
