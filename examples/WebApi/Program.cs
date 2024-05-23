@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Concurrent;
-using System.Reflection;
 using translord;
 using translord.Core;
 using translord.DeepL;
@@ -31,7 +30,6 @@ builder.Services.AddTranslordFileStore(options =>
 builder.Services.AddTranslordDeepLTranslator(options => { options.AuthKey = builder.Configuration["DeepLAuthKey"]; });
 // builder.Services.AddTranslordPostgresStore(options =>
 //     options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty);
-// builder.Services.AddTranslordCustomStore<CustomTranslationsStore>();
 builder.Services.AddTranslord(o =>
 {
     List<Language> supportedLanguages =

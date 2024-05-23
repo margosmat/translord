@@ -76,6 +76,18 @@ public static class LanguageExtensions
         }
     }
     
+    public static string GetSourceIsoCode(this Language language)
+    {
+        switch (language)
+        {
+            case Language.EnglishBritish:
+            case Language.EnglishAmerican: return "en";
+            case Language.PortugueseBrazilian:
+            case Language.PortugueseEuropean: return "pt";
+            default: return GetIsoCode(language);
+        }
+    }
+    
     public static string GetName(this Language language)
     {
         switch (language)

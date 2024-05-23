@@ -15,6 +15,7 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.1" />
         <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.5.0" />
         <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.5.0" />
+        <PackageReference Include="translord" Version="0.1.2" />
     </ItemGroup>
 
     <ItemGroup>
@@ -31,10 +32,5 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
     </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\translord\translord.csproj" />
-    </ItemGroup>
-
-
+    
 </Project>
