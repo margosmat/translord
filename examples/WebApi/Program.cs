@@ -3,8 +3,6 @@ using System.Collections.Concurrent;
 using translord;
 using translord.Core;
 using translord.DeepL;
-using translord.EntityFramework;
-using translord.EntityFramework.Postgres;
 using translord.Enums;
 using translord.Manager;
 using translord.Manager.Data;

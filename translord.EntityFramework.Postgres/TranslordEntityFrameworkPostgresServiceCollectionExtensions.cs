@@ -16,7 +16,8 @@ public static class TranslordEntityFrameworkPostgresServiceCollectionExtensions
     {
         var options = new AddTranslordPostgresStoreOptions();
         setupAction(options);
-        var connectionString = options.ConnectionString ?? throw new ArgumentNullException(nameof(options.ConnectionString));
+        var connectionString = options.ConnectionString ??
+                               throw new ArgumentNullException(nameof(options.ConnectionString));
         services.AddDbContext<TranslationsDbContext>(o => o.UseNpgsql(connectionString));
         services.AddTranslordEfStore();
         return services;

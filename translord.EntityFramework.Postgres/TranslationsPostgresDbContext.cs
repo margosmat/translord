@@ -6,7 +6,9 @@ namespace translord.EntityFramework.Postgres;
 internal class TranslationsPostgresDbContext : TranslationsDbContext
 {
     private readonly string _connectionString = "";
-    
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseNpgsql(_connectionString);
+    {
+        optionsBuilder.UseNpgsql(_connectionString);
+    }
 }
