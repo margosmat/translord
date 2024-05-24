@@ -4,7 +4,21 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <PackageId>translord.EntityFramework</PackageId>
+        <Version>0.1.0</Version>
+        <Authors>Mateusz Margos</Authors>
+        <Product>translord.EntityFramework</Product>
+        <Description>translord.EntityFramework - package containing configuration of the translations store using EF Core for translord.</Description>
+        <PackageProjectUrl>https://github.com/margosmat/translord/tree/main/translord.EntityFramework</PackageProjectUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>icon.jpeg</PackageIcon>
     </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Include="icon.jpeg" Pack="true" PackagePath="\"/>
+    </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3" />
