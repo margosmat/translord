@@ -7,7 +7,22 @@
         <UserSecretsId>aspnet-translord.Manager-371988E9-EA43-44C9-8B25-9B12C86D6A56</UserSecretsId>
         <RootNamespace>translord.Manager</RootNamespace>
         <OutputType>Library</OutputType>
+        <PackageId>translord.Manager</PackageId>
+        <Version>0.1.0</Version>
+        <Authors>Mateusz Margos</Authors>
+        <Product>translord.Manager</Product>
+        <Description>translord.Manager - package containing TMS admin panel for translord.</Description>
+        <PackageProjectUrl>https://github.com/margosmat/translord/tree/main/translord.Manager</PackageProjectUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>icon.jpeg</PackageIcon>
+        <IsPackable>true</IsPackable>
     </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Include="icon.jpeg" Pack="true" PackagePath="\"/>
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.1" />

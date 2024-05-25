@@ -7,8 +7,7 @@
     {
         <FluentStack Orientation="Orientation.Horizontal" Style="margin-top: 30px">
             <span style="width: 120px">@language.GetName()</span>
-            <FluentInputFile @ref="@myFileUploader"
-                             DragDropZoneVisible="false"
+            <FluentInputFile DragDropZoneVisible="false"
                              Mode="InputFileMode.Stream"
                              Multiple="false"
                              AnchorId="@($"MyUploadButton-{language.GetName()}")"
@@ -31,9 +30,7 @@
 </FluentDialogBody>
 
 @code {
-    FluentInputFile? myFileUploader = default!;
-
-    [Parameter] public Dictionary<Language, FluentInputFileEventArgs> Content { get; set; }
+    [Parameter] public required Dictionary<Language, FluentInputFileEventArgs> Content { get; set; }
 
     void OnCompleted(Language lang, IEnumerable<FluentInputFileEventArgs> files)
     {

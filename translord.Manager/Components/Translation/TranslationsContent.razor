@@ -133,7 +133,7 @@
             PreventScroll = true
         };
 
-        var groupedTranslation = new GroupedTranslations(Translator.GetSupportedLanguages().Count)
+        var groupedTranslation = new GroupedTranslations
         {
             Key = t?.Key ?? "",
             Translations = t?.Select(x => x.Copy()).ToList() ?? Translator.GetSupportedLanguages().Select(x => new Translation
