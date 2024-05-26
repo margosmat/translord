@@ -21,4 +21,13 @@ internal class TranslordRedisCache(IConnectionMultiplexer redis) : ITranslations
         var db = redis.GetDatabase();
         await db.KeyDeleteAsync(key);
     }
+    
+    public async Task RemoveAll(List<string> keys)
+    {
+        var db = redis.GetDatabase();
+        foreach (var key in keys)
+        {
+            await db.KeyDeleteAsync(key);
+        }
+    }
 }

@@ -22,4 +22,9 @@ public class CustomTranslationsCache(ConcurrentDictionary<string, string> cache)
         cache.TryRemove(key, out _);
         return Task.CompletedTask;
     }
+
+    public Task RemoveAll(List<string> keys)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -16,6 +16,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton(new ConcurrentDictionary<string, string>());
+
+List<Language> supportedLanguages =
+[
+    Language.EnglishBritish, Language.Polish, Language.German, Language.French, Language.Japanese, Language.Spanish,
+    Language.Ukrainian, Language.Czech
+];
 builder.Services.AddTranslordRedisCache(x =>
 {
     x.Server = "localhost";
@@ -30,11 +36,6 @@ builder.Services.AddTranslordDeepLTranslator(options => { options.AuthKey = buil
 //     options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty);
 builder.Services.AddTranslord(o =>
 {
-    List<Language> supportedLanguages =
-    [
-        Language.EnglishBritish, Language.Polish, Language.German, Language.French, Language.Japanese, Language.Spanish,
-        Language.Ukrainian, Language.Czech
-    ];
     o.SupportedLanguages = supportedLanguages;
     o.DefaultLanguage = Language.EnglishBritish;
 });
@@ -43,6 +44,12 @@ builder.Services.AddDbContext<TranslordManagerDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty,
         b => b.MigrationsAssembly("WebApi")));
 builder.AddTranslordManager();
+
+var cache = builder.Services.BuildServiceProvider().GetService<ITranslationsCache>();
+if (cache is not null)
+{
+    await cache.RemoveAll(supportedLanguages.Select(x => $"{x}").ToList());
+}
 
 var app = builder.Build();
 
