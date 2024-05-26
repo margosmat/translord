@@ -8,7 +8,7 @@
         <RootNamespace>translord.Manager</RootNamespace>
         <OutputType>Library</OutputType>
         <PackageId>translord.Manager</PackageId>
-        <Version>0.1.0</Version>
+        <Version>0.1.1</Version>
         <Authors>Mateusz Margos</Authors>
         <Product>translord.Manager</Product>
         <Description>translord.Manager - package containing TMS admin panel for translord.</Description>

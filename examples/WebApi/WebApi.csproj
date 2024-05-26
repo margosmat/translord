@@ -21,17 +21,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Include="translations\translations.en-gb.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Include="translations\translations.pl.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
+      <ProjectReference Include="..\..\translord.Manager\translord.Manager.csproj" />
+      <ProjectReference Include="..\..\translord.RedisCache\translord.RedisCache.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\translord.Manager\translord.Manager.csproj" />
-      <ProjectReference Include="..\..\translord.RedisCache\translord.RedisCache.csproj" />
+      <Folder Include="translations\" />
     </ItemGroup>
 
 </Project>

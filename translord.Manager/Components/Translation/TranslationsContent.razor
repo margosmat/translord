@@ -37,7 +37,7 @@
             <FluentDataGrid
                 Items="@_itemsQueryable"
                 ItemSize="54"
-                Loading="@(_itemsQueryable is null || !_itemsQueryable.Any())"
+                Loading="@(_isLoading)"
                 ResizableColumns="true"
                 GenerateHeader="GenerateHeaderOption.Sticky"
                 Style="@($"width: {_gridSize}px")"
@@ -73,6 +73,7 @@
     int _gridSize;
     Language? _defaultLang;
     bool _progressOverlayVisible;
+    bool _isLoading = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -84,8 +85,10 @@
     
     private async Task RefreshData()
     {
+        _isLoading = true;
         var translations = await Translator.GetAllTranslations();
         _itemsQueryable = translations.GroupBy(x => x.Key).AsQueryable();
+        _isLoading = false;
     }
 
     private async Task RemoveTranslation(string key)
