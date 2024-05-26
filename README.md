@@ -79,6 +79,9 @@ var label = await translator.GetTranslation("label.test", Language.Polish);
 var translations = await translator.GetAllTranslations(Language.English);
 ```
 
+### FileStore
+Core `translord` package contains the `FileStore` implementation. The only requirement is the `TranslationsPath` for the `FileStore` to load the translations from. Be sure that the directory exists, otherwise `FileStore` will throw an error.
+
 ### Custom implementations
 You can configure your own custom implementations for the **store**, **cache** or **translator** in translord. Just implement specific interface and be sure to register it in DI:
 ```c#
