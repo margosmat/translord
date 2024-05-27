@@ -4,7 +4,21 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <PackageId>translord.RedisCache</PackageId>
+        <Version>0.1.0</Version>
+        <Authors>Mateusz Margos</Authors>
+        <Product>translord.RedisCache</Product>
+        <Description>translord.RedisCache - package containing configuration of the translations cache using Redis for translord.</Description>
+        <PackageProjectUrl>https://github.com/margosmat/translord/tree/main/translord.RedisCache</PackageProjectUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>icon.jpeg</PackageIcon>
     </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Include="icon.jpeg" Pack="true" PackagePath="\"/>
+    </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="StackExchange.Redis" Version="2.7.33" />

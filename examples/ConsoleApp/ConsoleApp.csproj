@@ -9,12 +9,6 @@
 
 
     <ItemGroup>
-      <ProjectReference Include="..\..\translord.DeepL\translord.DeepL.csproj" />
-      <ProjectReference Include="..\..\translord\translord.csproj" />
-    </ItemGroup>
-
-
-    <ItemGroup>
       <None Update="translations\translations.en.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
@@ -27,6 +21,8 @@
     <ItemGroup>
       <PackageReference Include="Dumpify" Version="0.6.5" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+      <PackageReference Include="translord" Version="0.1.3" />
+      <PackageReference Include="translord.DeepL" Version="0.1.0" />
     </ItemGroup>
 
 </Project>
