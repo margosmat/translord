@@ -7,7 +7,6 @@ using translord.Enums;
 using translord.Manager;
 using translord.Manager.Data;
 using translord.RedisCache;
-using WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,8 +31,6 @@ builder.Services.AddTranslordFileStore(options =>
     options.TranslationsPath = Path.Combine(Directory.GetCurrentDirectory(), "translations");
 });
 builder.Services.AddTranslordDeepLTranslator(options => { options.AuthKey = builder.Configuration["DeepLAuthKey"]; });
-// builder.Services.AddTranslordPostgresStore(options =>
-//     options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty);
 builder.Services.AddTranslord(o =>
 {
     o.SupportedLanguages = supportedLanguages;
@@ -64,11 +61,11 @@ app.UseHttpsRedirection();
 
 app.MapGet("/translations/{language}/{key?}", async (Language language, string? key) =>
     {
-        List<Language> supportedLanguages = new() { Language.EnglishBritish, Language.Polish };
+        List<Language> languages = [Language.EnglishBritish, Language.Polish];
         var path = Path.Combine(Directory.GetCurrentDirectory(), "translations");
         var translator =
             new TranslatorConfiguration(
-                new TranslatorConfigurationOptions { SupportedLanguages = supportedLanguages },
+                new TranslatorConfigurationOptions { SupportedLanguages = languages },
                 new FileStore(new FileStoreOptions { TranslationsPath = path }, null)).CreateTranslator();
 
         if (key is null) return await translator.GetAllTranslationsRawJson(language);
