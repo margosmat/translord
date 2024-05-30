@@ -400,3 +400,6 @@ FodyWeavers.xsd
 
 .DS_Store
 *.db
+
+.next/
+node_modules/
