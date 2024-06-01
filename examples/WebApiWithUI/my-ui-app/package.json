@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "accept-language": "^3.0.18",
+    "axios": "^1.7.2",
     "i18next": "^23.11.5",
     "i18next-http-backend": "^2.5.2",
     "next": "14.2.3",

@@ -59,29 +59,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/translations/{language}/{key?}", async (Language language, string? key) =>
+app.MapGet("/api/translations/{languageIsoCode}", async (string languageIsoCode, ITranslator translator) =>
     {
-        List<Language> languages = [Language.EnglishBritish, Language.Polish];
-        var path = Path.Combine(Directory.GetCurrentDirectory(), "translations");
-        var translator =
-            new TranslatorConfiguration(
-                new TranslatorConfigurationOptions { SupportedLanguages = languages },
-                new FileStore(new FileStoreOptions { TranslationsPath = path }, null)).CreateTranslator();
-
-        if (key is null) return await translator.GetAllTranslationsRawJson(language);
-
-        return await translator.GetTranslation(key, language);
+        var language = languageIsoCode.ToLower().FromIsoCode();
+        
+        return await translator.GetAllTranslationsRawJson(language);
     })
     .WithName("GetTranslations")
-    .WithOpenApi();
-
-app.MapGet("/translations-ef/{language}/{key?}", async (Language language, string? key, ITranslator translator) =>
-    {
-        if (key is null) return await translator.GetAllTranslationsRawJson(language);
-
-        return await translator.GetTranslation(key, language);
-    })
-    .WithName("GetTranslationsWithEF")
     .WithOpenApi();
 
 app.UseTranslordManager();
