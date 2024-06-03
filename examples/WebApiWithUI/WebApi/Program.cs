@@ -62,10 +62,15 @@ app.UseHttpsRedirection();
 app.MapGet("/api/translations/{languageIsoCode}", async (string languageIsoCode, ITranslator translator) =>
     {
         var language = languageIsoCode.ToLower().FromIsoCode();
-        
+
         return await translator.GetAllTranslationsRawJson(language);
     })
     .WithName("GetTranslations")
+    .WithOpenApi();
+
+app.MapGet("/api/supported-languages",
+        (ITranslator translator) => translator.GetSupportedLanguages().Select(x => x.GetIsoCode()))
+    .WithName("GetSupportedLanguages")
     .WithOpenApi();
 
 app.UseTranslordManager();
