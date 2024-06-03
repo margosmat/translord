@@ -2,8 +2,7 @@ import { ResourceKey, createInstance } from "i18next";
 import { initReactI18next } from "react-i18next/initReactI18next";
 import { getOptions } from "./settings";
 import HttpBackend, { HttpBackendOptions } from "i18next-http-backend";
-import axios from "axios";
-import https from "https";
+import axiosInstance from "../api/axiosInstance";
 
 const initI18next = async (lng: string, ns: string) => {
   const i18nInstance = createInstance();
@@ -14,10 +13,8 @@ const initI18next = async (lng: string, ns: string) => {
       backend: {
         request: async (options, url, data, callback) => {
           try {
-            const httpsAgent = new https.Agent({
-                rejectUnauthorized: false
-            });
-            const result = await axios.get<ResourceKey>(`https:/localhost:7035/api/translations/${lng}`, {httpsAgent});
+            
+            const result = await axiosInstance.get<ResourceKey>(`https:/localhost:7035/api/translations/${lng}`);
             console.log(result.data);
             callback(null, {
               data: result.data,
