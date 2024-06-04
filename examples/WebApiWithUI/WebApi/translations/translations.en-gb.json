@@ -1,4 +1,10 @@
 {
   "label.add": "add",
-  "label.chooseLanguage": "Choose language"
+  "label.chooseLanguage": "Choose language",
+  "message.paragraph2": "Use this sample project as a sandbox.",
+  "message.paragraph4": "Read the readme, check out the translord nuget packages.",
+  "message.paragraph5": "If you think that translord is missing some features to be perfect, please add an issue on GH.",
+  "message.paragraph1": "Hi! I\u0027m glad you\u0027re checking out translord.",
+  "message.paragraph3": "Add new languages, new labels, try the TMS panel.",
+  "message.paragraph6": "If you like the project, please leave a star."
 }

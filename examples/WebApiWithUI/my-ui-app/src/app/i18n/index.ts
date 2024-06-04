@@ -49,3 +49,11 @@ export async function useTranslation(
     i18n: i18nextInstance,
   };
 }
+
+export const mapToi18nextSupportedLanguage = (l: string) => {
+  if (l == 'en-gb') return 'en-GB'
+  if (l == 'en-us') return 'en-US'
+  if (l == 'pt-br') return 'pt-BR'
+  if (l == 'pt-pt') return 'pt-PT'
+  return l
+}

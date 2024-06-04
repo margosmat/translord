@@ -1,4 +1,10 @@
 {
   "label.add": "doda\u0107",
-  "label.chooseLanguage": "Wybierz j\u0119zyk"
+  "label.chooseLanguage": "Wybierz j\u0119zyk",
+  "message.paragraph4": "Przeczytaj readme, sprawd\u017A pakiety translord nuget.",
+  "message.paragraph2": "U\u017Cyj tego przyk\u0142adowego projektu jako piaskownicy.",
+  "message.paragraph5": "Je\u015Bli uwa\u017Casz, \u017Ce translordowi brakuje jakiej\u015B funkcji do idea\u0142u, dodaj zg\u0142oszenie na GH.",
+  "message.paragraph1": "Cze\u015B\u0107! Ciesz\u0119 si\u0119, \u017Ce sprawdzasz translord.",
+  "message.paragraph3": "Dodaj nowe j\u0119zyki, nowe etykiety, wypr\u00F3buj panel TMS.",
+  "message.paragraph6": "Je\u015Bli podoba Ci si\u0119 projekt, zostaw gwiazdk\u0119."
 }
