@@ -1,6 +1,16 @@
 # translord
 
 ---
+### Nuget
+
+[![NuGet Version](https://img.shields.io/nuget/v/translord?style=flat-square&label=translord)](https://www.nuget.org/packages/translord)
+[![NuGet Version](https://img.shields.io/nuget/v/translord.DeepL?style=flat-square&label=translord.DeepL)](https://www.nuget.org/packages/translord.DeepL)
+[![NuGet Version](https://img.shields.io/nuget/v/translord.EntityFramework?style=flat-square&label=translord.EntityFramework)](https://www.nuget.org/packages/translord.EntityFramework)
+[![NuGet Version](https://img.shields.io/nuget/v/translord.EntityFramework.Postgres?style=flat-square&label=translord.EntityFramework.Postgres)](https://www.nuget.org/packages/translord.EntityFramework.Postgres)
+[![NuGet Version](https://img.shields.io/nuget/v/translord.Manager?style=flat-square&label=translord.Manager)](https://www.nuget.org/packages/translord.Manager)
+[![NuGet Version](https://img.shields.io/nuget/v/translord.RedisCache?style=flat-square&label=translord.RedisCache)](https://www.nuget.org/packages/translord.RedisCache)
+
+---
 
 <div align="center">
 
@@ -47,7 +57,6 @@ builder.Services.AddTranslord(o =>
 {
     List<Language> supportedLanguages = [Language.English, Language.Polish, Language.German];
     o.SupportedLanguages = supportedLanguages;
-    o.IsCachingEnabled = true;
 });
 ```
 
@@ -59,7 +68,6 @@ builder.Services.AddTranslord(o =>
 {
     List<Language> supportedLanguages = [Language.English, Language.Polish, Language.German];
     o.SupportedLanguages = supportedLanguages;
-    o.IsCachingEnabled = true;
 });
 builder.AddTranslordManager();
 ```
@@ -104,6 +112,16 @@ For now, you can import your translations in one specific way. You need one `.js
 
 ![TMS panel screenshot](assets/panel_screenshot.png)
 
+## Demo
+
+
+https://github.com/margosmat/translord/assets/25266191/198265df-2397-4b0d-ab4d-5172cdf6bd75
+
+
+## Examples
+Please check [examples](https://github.com/margosmat/translord/tree/main/examples) folder for example projects using translord to manage translations.
+
+
 ## Features
 
 - [x] modularity
@@ -113,7 +131,7 @@ For now, you can import your translations in one specific way. You need one `.js
 - [x] CMS-like panel
 - [x] import of existing translations
 - [x] caching (using Redis)
-- [ ] examples (in progress)
+- [x] examples
 
 ### Ideas for the next features
 
