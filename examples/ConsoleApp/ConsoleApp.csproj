@@ -9,18 +9,6 @@
 
 
     <ItemGroup>
-      <None Update="translations\translations.en.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="translations\translations.pl.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
-
-    <ItemGroup>
-      <PackageReference Include="Dumpify" Version="0.6.5" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
       <PackageReference Include="translord" Version="0.1.4" />
       <PackageReference Include="translord.DeepL" Version="0.1.0" />
     </ItemGroup>

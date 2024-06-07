@@ -1,4 +1,9 @@
 {
-  "label.test": "Test",
-  "label.hello": "Hej"
+  "message.paragraph1": "Hej, to jest pierwszy akapit przykładowego tekstu,",
+  "message.paragraph2": "(uzywasz domyślnego języka, zeby zobaczyć tłumaczenia wykonane przy uzyciu DeepL, wybierz inny język),",
+  "message.paragraph3": "ta aplikacja słuzy do zademonstrowania jak mogłoby wyglądać uzycie translord",
+  "message.paragraph4": "w aplikacjach desktopowych, konsolowych, czy grach stworzonych przy uzyciu Unity.",
+  "message.paragraph5": "O ile tłumaczenie wszystkich tekstów w aplikacji podczas jej startu nie wydaje się zbyt efektywne,",
+  "message.paragraph6": "mogłoby się sprawdzić jako część build process'u, przynajmniej do czasu stworzenia",
+  "message.paragraph7": "oficjalnego Github Action dla translord 😅 Dzięki za uzycie translord, miłego programowania!"
 }
