@@ -1,52 +1,23 @@
 ﻿@page "/"
-@using translord.Enums
-@inject ITranslator Translator
+@using translord.Manager.Components.Translation
+@inject IConfiguration Configuration
 
 <PageTitle>Home</PageTitle>
 
 <h1>translord</h1>
 
-<AuthorizeView>
-    <Authorized>
-        <p>Translations statistics:</p>
-        @if (_baseNumber == 0)
-        {
-            <p>Start adding translations to see statistics.</p>
-        }
-        else
-        {
-            @foreach(var (lang, count) in _translationsCount)
-            {
-                <FluentStack Style="margin: 30px;">
-                    <FluentLabel Style="width: 200px;">@lang.GetName() - @(Math.Min(count * 100 / _baseNumber, 100))%</FluentLabel>
-
-                    <FluentProgress Min="0" Max="100" Value="@(count * 100 / _baseNumber)"
-                                    Stroke="ProgressStroke.Normal"
-                                    Color="ProgressColor.Primary"
-                                    Width="200px" />
-                </FluentStack>
-            }
-        }
-    </Authorized>
-    <NotAuthorized>
-        <p>Log in to see your translations statistics.</p>
-    </NotAuthorized>
-</AuthorizeView>
-
-@code {
-    List<(Language lang, int count)> _translationsCount = new();
-    int _baseNumber;
-    
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-        var defaultLanguage = Translator.GetDefaultLanguage();
-        _translationsCount = await Translator.GetTranslationsCount();
-        _translationsCount.Sort((a, b) =>
-        {
-            if (defaultLanguage != null) return a.lang == defaultLanguage.Value ? -1 : b.lang == defaultLanguage.Value ? 1 : b.count - a.count;
-            return b.count - a.count;
-        });
-        _baseNumber = defaultLanguage.HasValue ? _translationsCount.Find(x => x.lang == defaultLanguage).count : _translationsCount.MaxBy(x => x.count).count;
-    }
+@if (Configuration.GetValue<bool>("IsTranslordManagerAuthEnabled"))
+{
+    <AuthorizeView>
+        <Authorized>
+            <TranslationsStatistics/>
+        </Authorized>
+        <NotAuthorized>
+            <p>Log in to see your translations statistics.</p>
+        </NotAuthorized>
+    </AuthorizeView>
+}
+else
+{
+    <TranslationsStatistics/>
 }
