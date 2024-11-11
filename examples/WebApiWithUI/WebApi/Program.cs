@@ -22,20 +22,20 @@ List<Language> supportedLanguages =
     Language.Ukrainian, Language.Czech
 ];
 builder.Services.AddTranslordRedisCache(x =>
-{
-    x.Server = "localhost";
-    x.Port = 6379;
-});
-builder.Services.AddTranslordFileStore(options =>
-{
-    options.TranslationsPath = Path.Combine(Directory.GetCurrentDirectory(), "translations");
-});
-builder.Services.AddTranslordDeepLTranslator(options => { options.AuthKey = builder.Configuration["DeepLAuthKey"]; });
-builder.Services.AddTranslord(o =>
-{
-    o.SupportedLanguages = supportedLanguages;
-    o.DefaultLanguage = Language.EnglishBritish;
-});
+    {
+        x.Server = "localhost";
+        x.Port = 6379;
+    })
+    .AddTranslordFileStore(options =>
+    {
+        options.TranslationsPath = Path.Combine(Directory.GetCurrentDirectory(), "translations");
+    })
+    .AddTranslordDeepLTranslator(options => { options.AuthKey = builder.Configuration["DeepLAuthKey"]; })
+    .AddTranslord(o =>
+    {
+        o.SupportedLanguages = supportedLanguages;
+        o.DefaultLanguage = Language.EnglishBritish;
+    });
 
 builder.Services.AddDbContext<TranslordManagerDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty,
